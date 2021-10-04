@@ -71,6 +71,7 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas Unitarias"
 
+				bat "GISSPoCNatDevOps/GISSPoCNatDevOps/run.cmd"
 
 				echo "Finalizando Pruebas Unitarias"
 			}

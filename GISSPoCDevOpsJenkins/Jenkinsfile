@@ -7,7 +7,7 @@ pipeline {
 
 	stages {
 
-		stage('CheckOut Git') { // for display purposes
+		stage('CheckOut Natural Git') {
 			steps {
 				echo "Iniciando CheckOut de Git"
 
@@ -31,7 +31,7 @@ pipeline {
 				// C:\apache-ant-1.10.11\bin\ant.bat -file deploy.xml -Dnatural.ant.project.rootdir=../.. -lib C:\workspaces\DevOpsNat\NO4Jenkins\deploy build && exit %%ERRORLEVEL%%
 
 				script {
-					Parametros = '-file GISSPoCNatDevOps/GISSPoCNatDevOps/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib C:/workspaces/DevOpsNat/NO4Jenkins/deploy build && exit %%ERRORLEVEL%%'
+					def Parametros = '-file GISSPoCNatDevOps/GISSPoCNatDevOps/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib C:/workspaces/DevOpsNat/NO4Jenkins/deploy build && exit %%ERRORLEVEL%%'
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -50,16 +50,31 @@ pipeline {
 			steps {
 				echo "Iniciando Análisis de código (Kiuwan)"
 
-				kiuwan connectionProfileUuid: 'pqvj-J6Ik',
-					applicationName_dm: 'GISSPoCNatDevOps',
-					selectedMode: 'DELIVERY_MODE',
-					sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps',
-					indicateLanguages_dm: true,
-					languages_dm: 'natural',
-					waitForAuditResults_dm: true
+				script {
+					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
+						applicationName_dm: 'GISSPoCNatDevOps',
+						selectedMode: 'DELIVERY_MODE',
+						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps',
+						indicateLanguages_dm: true,
+						languages_dm: 'natural',
+						waitForAuditResults_dm: true
 
-				echo "Finalizando Análisis de código (Kiuwan)"
+					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
+					def Score = kiuwanOutput.auditResult.score
+				}
+
+				echo "Finalizando Análisis de código (Kiuwan) con ${Score}"
 			}
 		}
+
+		stage('Pruebas unitarias') {
+			steps {
+				echo "Iniciando Pruebas Unitarias"
+
+
+				echo "Finalizando Pruebas Unitarias"
+			}
+		}
+
 	}
 }

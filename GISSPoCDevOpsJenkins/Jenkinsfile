@@ -72,7 +72,7 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas Unitarias"
 
-				bat "GISSPoCNatDevOps/GISSPoCNatDevOps/run.cmd"
+				bat "GISSPoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
 
 				echo "Finalizando Pruebas Unitarias"
 			}

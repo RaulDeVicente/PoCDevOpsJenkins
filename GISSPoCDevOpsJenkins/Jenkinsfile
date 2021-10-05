@@ -51,13 +51,7 @@ pipeline {
 				echo "Iniciando Análisis de código (Kiuwan)"
 
 				script {
-					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
-						applicationName_dm: 'GISSPoCNatDevOps',
-						selectedMode: 'DELIVERY_MODE',
-						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps',
-						indicateLanguages_dm: true,
-						languages_dm: 'natural',
-						waitForAuditResults_dm: true
+					kiuwan connectionProfileUuid: 'pqvj-J6Ik', applicationName_dm: 'GISSPoCNatDevOps', selectedMode: 'DELIVERY_MODE', sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps', indicateLanguages_dm: true, languages_dm: 'natural', waitForAuditResults_dm: true
 
 					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
 					def Score = kiuwanOutput.auditResult.score

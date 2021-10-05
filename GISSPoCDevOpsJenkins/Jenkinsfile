@@ -57,8 +57,8 @@ pipeline {
 					def Score = kiuwanOutput.auditResult.score
 				}
 
-				echo "Finalizando Análisis de código (Kiuwan) con ${Score}"
-//				echo "Finalizando Análisis de código (Kiuwan)"
+//				echo "Finalizando Análisis de código (Kiuwan) con ${Score}"
+				echo "Finalizando Análisis de código (Kiuwan)"
 			}
 		}
 

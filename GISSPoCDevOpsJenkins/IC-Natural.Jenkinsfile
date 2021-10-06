@@ -1,3 +1,8 @@
+// Pipeline de la PoC del IC de las aplicaciones Natural.
+
+// Variable con la puntuación obtenida en Kiuwan.
+def KiuwanScore
+
 pipeline {
 	agent any
 
@@ -48,17 +53,17 @@ pipeline {
 
 		stage('Análisis de código (Kiuwan)') {
 			steps {
-				echo "Iniciando Análisis de código (Kiuwan)"
-
 				script {
+					echo "Iniciando Análisis de código (Kiuwan)"
+
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik', applicationName_dm: 'GISSPoCNatDevOps', selectedMode: 'DELIVERY_MODE', sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps', indicateLanguages_dm: true, languages_dm: 'natural', waitForAuditResults_dm: true
 
 					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
-					def Score = kiuwanOutput.auditResult.score
+					KiuwanScore = kiuwanOutput.auditResult.score
+
+					echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
 				}
 
-//				echo "Finalizando Análisis de código (Kiuwan) con ${Score}"
-				echo "Finalizando Análisis de código (Kiuwan)"
 			}
 		}
 
@@ -66,7 +71,7 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas Unitarias"
 
-				bat "C:/Users/99gu2142/git/PoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
+//				bat "C:/Users/99gu2142/git/PoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
 //				bat "GISSPoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
 
 				echo "Finalizando Pruebas Unitarias"

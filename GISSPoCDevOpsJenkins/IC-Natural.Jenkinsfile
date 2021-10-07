@@ -53,28 +53,64 @@ pipeline {
 
 		stage('Análisis de código (Kiuwan)') {
 			steps {
+				echo "Iniciando Análisis de código (Kiuwan)"
+
 				script {
-					echo "Iniciando Análisis de código (Kiuwan)"
 
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik', applicationName_dm: 'GISSPoCNatDevOps', selectedMode: 'DELIVERY_MODE', sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps', indicateLanguages_dm: true, languages_dm: 'natural', waitForAuditResults_dm: true
 
 					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
 					KiuwanScore = kiuwanOutput.auditResult.score
-
-					echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
 				}
 
+				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
 			}
 		}
 
-		stage('Pruebas unitarias') {
+		stage('Arrancando monitorización Adabas (TPAI)') {
 			steps {
-				echo "Iniciando Pruebas Unitarias"
+				echo "Iniciando arranque monitorización Adabas (TPAI)"
+
+
+				echo "Finalizando arranque monitorización Adabas (TPAI)"
+			}
+		}
+
+		stage('Pruebas unitarias (Natural Unit Test)') {
+			steps {
+				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 //				bat "C:/Users/99gu2142/git/PoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
 //				bat "GISSPoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
 
-				echo "Finalizando Pruebas Unitarias"
+				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
+			}
+		}
+
+		stage('Pruebas funcionales (ALM - UFT)') {
+			steps {
+				echo "Iniciando Pruebas funcionales (ALM - UFT)"
+
+
+				echo "Finalizando Pruebas funcionales (ALM - UFT)"
+			}
+		}
+
+		stage('Parando monitorización Adabas (TPAI)') {
+			steps {
+				echo "Iniciando parada monitorización Adabas (TPAI)"
+
+
+				echo "Finalizando parada monitorización Adabas (TPAI)"
+			}
+		}
+
+		stage('Obteniendo análisis monitorización Adabas (TPAI)') {
+			steps {
+				echo "Iniciando análisis monitorización Adabas (TPAI)"
+
+
+				echo "Finalizando análisis monitorización Adabas (TPAI)"
 			}
 		}
 

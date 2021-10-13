@@ -71,7 +71,7 @@ pipeline {
 			steps {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
 
-				script {
+//				script {
 					httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
 						httpMode: 'POST',
 						customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_iniciarMonitores']],
@@ -86,7 +86,7 @@ pipeline {
 						responseHandle: 'NONE',
 						validResponseContent: '<resultado>OK</resultado>',
 						wrapAsMultipart: false
-				}
+//				}
 
 				echo "Finalizando arranque monitorización Adabas (TPAI)"
 			}
@@ -119,7 +119,7 @@ pipeline {
 			steps {
 				echo "Iniciando parada monitorización Adabas (TPAI)"
 
-				script {
+//				script {
 					httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
 						httpMode: 'POST',
 						customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_pararMonitores']],
@@ -134,7 +134,7 @@ pipeline {
 						responseHandle: 'NONE',
 						validResponseContent: '<resultado>OK</resultado>',
 						wrapAsMultipart: false
-				}
+//				}
 
 				echo "Finalizando parada monitorización Adabas (TPAI)"
 			}
@@ -151,13 +151,13 @@ pipeline {
 
 	}
 
-	post {
-	    always {
+//	post {
+//	    always {
 //    	    emailext attachLog: true,
 //    	    	recipientProviders: [developers(), requestor()],
 //    	    	to: 'raul-carlos.de-vicente@at.seg-social.es; jesus.gomez3@at.seg-social.es',
 //    	    	subject: '[Jenkins] Build realizada.',
 //    	    	body: 'Se ha realizado un Build de la aplicación. '
-    	}
-	}
+//    	}
+//	}
 }

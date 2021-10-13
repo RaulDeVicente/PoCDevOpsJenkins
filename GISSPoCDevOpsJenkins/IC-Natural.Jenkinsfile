@@ -109,8 +109,7 @@ pipeline {
 
 				node ('UFT_AGENT') {
 
-					runFromAlmBuilder almClientID: 'No client ID defined in Jenkins Configure System page',
-						almServerName: 'ALMServer',
+					runFromAlmBuilder almServerName: 'ALMServer',
 						almDomain: 'CCD',
 						almProject: 'DEVOPS_PC',
 						almUserName: 'JENKINPC',

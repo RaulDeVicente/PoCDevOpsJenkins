@@ -117,7 +117,11 @@ pipeline {
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: '10.99.104.203',
 						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021''',
-						almTimeout: '300'
+						almTimeout: '300',
+						almClientID: '',
+						almRunResultsMode: '',
+						almApiKey: '',
+						isSSOEnabled: false	
 
 				}
 

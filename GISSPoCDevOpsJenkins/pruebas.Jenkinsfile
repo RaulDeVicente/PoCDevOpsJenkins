@@ -7,7 +7,7 @@ pipeline {
 
 		stage ('Pruebecillas') {
 			steps {
-			    node ('UFT_AGENT') {
+			    node ('UFT_AGENT2') {
 				
 				echo "Iniciando Pruebecillas"
 				

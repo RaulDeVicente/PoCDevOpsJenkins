@@ -84,7 +84,7 @@ pipeline {
 						</soapenv:Envelope>''',
 						consoleLogResponseBody: true,
 						responseHandle: 'NONE',
-						validResponseContent: '<resultado>OK</resultado>',
+						validResponseContent: '<resultado>1</resultado>',
 						wrapAsMultipart: false
 //				}
 
@@ -132,7 +132,7 @@ pipeline {
 						</soapenv:Envelope>''',
 						consoleLogResponseBody: true,
 						responseHandle: 'NONE',
-						validResponseContent: '<resultado>OK</resultado>',
+						validResponseContent: '<resultado>1</resultado>',
 						wrapAsMultipart: false
 //				}
 

@@ -7,11 +7,15 @@ pipeline {
 
 		stage('Pruebecillas') {
 			steps {
+				
 				echo "Iniciando Pruebecillas"
 				
 				script {
-					def kiuwanOutput = readJSON file: "C:/workspaces/DevOpsNat/Jenkins/.jenkins/workspace/DevOps Natural/IC de Natural/kiuwan/output.json"
-					Score = kiuwanOutput.auditResult.score
+				    node ('UFT_AGENT') {
+				             
+						def kiuwanOutput = readJSON file: "C:/workspaces/DevOpsNat/Jenkins/.jenkins/workspace/DevOps Natural/IC de Natural/kiuwan/output.json"
+						Score = kiuwanOutput.auditResult.score
+					}
 				}
 
 				echo "Finalizando Pruebecillas con ${Score}"

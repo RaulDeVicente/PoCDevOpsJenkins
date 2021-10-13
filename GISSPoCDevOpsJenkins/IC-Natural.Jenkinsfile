@@ -118,11 +118,11 @@ pipeline {
 
 	post {
 	    always {
-    	    emailext attachLog: true,
-    	    	recipientProviders: [developers(), requestor()],
-    	    	to: 'raul-carlos.de-vicente@at.seg-social.es',
-    	    	subject: '[Jenkins] Build realizada.',
-    	    	body: 'Ejemplo de cuerpo del mensaje.'
+//    	    emailext attachLog: true,
+//    	    	recipientProviders: [developers(), requestor()],
+//    	    	to: 'raul-carlos.de-vicente@at.seg-social.es; jesus.gomez3@at.seg-social.es',
+//    	    	subject: '[Jenkins] Build realizada.',
+//    	    	body: 'Se ha realizado un Build de la aplicación. '
     	}
 	}
 }

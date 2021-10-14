@@ -114,19 +114,19 @@ pipeline {
 
 				node ('UFT_AGENT') {
 
-					runFromAlmBuilder almServerName: 'ALMServer',
-						almDomain: 'CCD',
-						almProject: 'DEVOPS_PC',
-						almUserName: 'JENKINPC',
-						almPassword: 'JENKINPC01',
-						almRunMode: 'RUN_REMOTE',
-						almRunHost: '10.99.104.203',
-						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021''',
-						almTimeout: '300',
-						almClientID: '',
-						almRunResultsMode: '',
-						almApiKey: '',
-						isSSOEnabled: false	
+//					runFromAlmBuilder almServerName: 'ALMServer',
+//						almDomain: 'CCD',
+//						almProject: 'DEVOPS_PC',
+//						almUserName: 'JENKINPC',
+//						almPassword: 'JENKINPC01',
+//						almRunMode: 'RUN_REMOTE',
+//						almRunHost: '10.99.104.203',
+//						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021''',
+//						almTimeout: '300',
+//						almClientID: '',
+//						almRunResultsMode: '',
+//						almApiKey: '',
+//						isSSOEnabled: false	
 
 				}
 

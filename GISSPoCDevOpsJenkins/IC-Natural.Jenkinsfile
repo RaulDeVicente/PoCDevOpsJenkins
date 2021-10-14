@@ -60,10 +60,10 @@ pipeline {
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName_dm: 'GISSPoCNatDevOps',
 						selectedMode: 'DELIVERY_MODE',
-						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps',
+						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps/Natural-Libraries',
 						indicateLanguages_dm: true,
 						languages_dm: 'natural',
-						excludes_dm: '**/*.txt',
+//						excludes_dm: '**/*.txt',
 						waitForAuditResults_dm: true
 
 					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"

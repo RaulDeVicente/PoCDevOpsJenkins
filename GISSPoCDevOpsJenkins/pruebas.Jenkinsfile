@@ -7,7 +7,7 @@ pipeline {
 
 		stage ('Pruebecillas') {
 			steps {
-//			    node ('UFT_AGENT2') {
+			    node ('UFT_AGENT') {
 				
 //				echo "Iniciando Pruebecillas"
 				
@@ -32,7 +32,7 @@ pipeline {
 //				}
 
 //				echo "Finalizando Pruebecillas con ${Score}"
-//				}
+				}
 			}
 		}
 	}

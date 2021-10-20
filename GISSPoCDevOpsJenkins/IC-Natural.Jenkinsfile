@@ -2,6 +2,7 @@
 
 // Variable con la puntuación obtenida en Kiuwan.
 def KiuwanScore
+def TpaiPeticionCambio
 
 pipeline {
 	agent any
@@ -28,6 +29,28 @@ pipeline {
 			}
 		}
 
+		stage('Análisis de código (Kiuwan)') {
+			steps {
+				echo "Iniciando Análisis de código (Kiuwan)"
+
+				script {
+
+					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
+						applicationName_dm: 'GISSPoCNatDevOps',
+						selectedMode: 'DELIVERY_MODE',
+						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps/Natural-Libraries',
+						indicateLanguages_dm: true,
+						languages_dm: 'natural',
+						waitForAuditResults_dm: true
+
+					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
+					KiuwanScore = kiuwanOutput.auditResult.score
+				}
+
+				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
+			}
+		}
+
 		stage('Deploy en Desarrollo') {
 			steps {
 				echo "Iniciando Deploy en Desarrollo"
@@ -51,36 +74,13 @@ pipeline {
 			}
 		}
 
-		stage('Análisis de código (Kiuwan)') {
-			steps {
-				echo "Iniciando Análisis de código (Kiuwan)"
-
-				script {
-
-					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
-						applicationName_dm: 'GISSPoCNatDevOps',
-						selectedMode: 'DELIVERY_MODE',
-						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps/Natural-Libraries',
-						indicateLanguages_dm: true,
-						languages_dm: 'natural',
-//						excludes_dm: '**/*.txt',
-						waitForAuditResults_dm: true
-
-					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
-					KiuwanScore = kiuwanOutput.auditResult.score
-				}
-
-				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
-			}
-		}
-
 		stage('Arrancando monitorización Adabas (TPAI)') {
 			steps {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
 
 				httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
 					httpMode: 'POST',
-					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_iniciarMonitores']],
+					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_iniciarMonitores']],
 					timeout: 200,
 					requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
 					   <soapenv:Header/>
@@ -89,7 +89,7 @@ pipeline {
 					   </soapenv:Body>
 					</soapenv:Envelope>''',
 					consoleLogResponseBody: true,
-					responseHandle: 'NONE',
+			//		responseHandle: 'NONE',
 					validResponseContent: '<resultado>1</resultado>',
 					wrapAsMultipart: false
 
@@ -121,7 +121,6 @@ pipeline {
 						almPassword: 'JENKINPC01',
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: '10.99.104.203',
-//						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021''',
 						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
 						almTimeout: '300',
 						almClientID: '',
@@ -150,7 +149,7 @@ pipeline {
 					   </soapenv:Body>
 					</soapenv:Envelope>''',
 					consoleLogResponseBody: true,
-					responseHandle: 'NONE',
+//					responseHandle: 'NONE',
 					validResponseContent: '<resultado>1</resultado>',
 					wrapAsMultipart: false
 

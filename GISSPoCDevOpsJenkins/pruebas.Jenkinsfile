@@ -25,6 +25,9 @@ pipeline {
 
 					println('Status: '+ respuestaServico.status)
 					println('Response: '+respuestaServico.content)
+					final afterLastSlash = respuestaServico.substring(respuestaServico.indexOf('<peticionCambio>') + 1, respuestaServico.length())
+					println('inicio: '+ afterLastSlash)
+					
 				}
 
 //			    node ('UFT_AGENT') {

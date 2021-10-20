@@ -7,28 +7,29 @@ pipeline {
 
 		stage ('Pruebecillas') {
 			steps {
-				def respuestaServico = httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
-					httpMode: 'POST',
-					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_pruebaRespuestaServicio']],
-					timeout: 200,
-					requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
-					   <soapenv:Header/>
-					   <soapenv:Body>
-					      <ser:pruebaRespuestaServicio/>
-					   </soapenv:Body>
-					</soapenv:Envelope>''',
-					consoleLogResponseBody: true,
-			//		responseHandle: 'NONE',
-					validResponseContent: '<resultado>1</resultado>',
-					wrapAsMultipart: false
+				script {
+					def respuestaServico = httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
+						httpMode: 'POST',
+						customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_pruebaRespuestaServicio']],
+						timeout: 200,
+						requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
+						   <soapenv:Header/>
+						   <soapenv:Body>
+						      <ser:pruebaRespuestaServicio/>
+						   </soapenv:Body>
+						</soapenv:Envelope>''',
+						consoleLogResponseBody: true,
+				//		responseHandle: 'NONE',
+						validResponseContent: '<resultado>1</resultado>',
+						wrapAsMultipart: false
 
-				echo "Respuesta: ${respuestaServico}"
+					echo "Respuesta: ${respuestaServico}"
+				}
 
 //			    node ('UFT_AGENT') {
 				
 //				echo "Iniciando Pruebecillas"
 				
-//				script {
 				             
 //						def kiuwanOutput = readJSON file: "C:/workspaces/DevOpsNat/Jenkins/.jenkins/workspace/DevOps Natural/IC de Natural/kiuwan/output.json"
 //						Score = kiuwanOutput.auditResult.score

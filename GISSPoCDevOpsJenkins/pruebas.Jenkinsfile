@@ -7,7 +7,7 @@ pipeline {
 
 		stage ('Pruebecillas') {
 			steps {
-//				script {
+				script {
 					def respuestaServico = httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
 						httpMode: 'POST',
 						customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_pruebaRespuestaServicio']],
@@ -25,7 +25,7 @@ pipeline {
 
 					println('Status: '+ respuestaServico.status)
 					println('Response: '+respuestaServico.content)
-//				}
+				}
 
 //			    node ('UFT_AGENT') {
 				

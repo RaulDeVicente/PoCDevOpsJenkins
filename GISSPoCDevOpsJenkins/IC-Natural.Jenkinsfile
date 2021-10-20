@@ -41,6 +41,7 @@ pipeline {
 						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps/Natural-Libraries',
 						indicateLanguages_dm: true,
 						languages_dm: 'natural',
+						timeout_dm: 30,
 						waitForAuditResults_dm: true
 
 					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
@@ -122,7 +123,7 @@ pipeline {
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: '10.99.104.203',
 						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
-						almTimeout: '300',
+						almTimeout: '1000',
 						almClientID: '',
 						almRunResultsMode: '',
 						almApiKey: '',

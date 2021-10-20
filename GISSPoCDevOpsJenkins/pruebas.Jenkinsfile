@@ -25,7 +25,7 @@ pipeline {
 
 					println('Status: '+ respuestaServico.status)
 					println('Response: '+respuestaServico.content)
-					final afterLastSlash = respuestaServico.substring(respuestaServico.indexOf('<peticionCambio>') + 1, respuestaServico.length())
+					final afterLastSlash = respuestaServico.content.substring(respuestaServico.content.indexOf('<peticionCambio>') + 1, respuestaServico.content.length())
 					println('inicio: '+ afterLastSlash)
 					
 				}

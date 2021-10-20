@@ -123,7 +123,7 @@ pipeline {
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: '10.99.104.203',
 						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
-						almTimeout: '1000',
+						almTimeout: '2000',
 						almClientID: '',
 						almRunResultsMode: '',
 						almApiKey: '',

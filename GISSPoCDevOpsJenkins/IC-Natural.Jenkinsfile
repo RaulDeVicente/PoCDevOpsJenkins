@@ -1,7 +1,20 @@
 // Pipeline de la PoC del IC de las aplicaciones Natural.
 
+// Constantes:
+// Variable con la URL de acceso a Git.
+def urlGit = 'https://github.com/RaulDeVicente'
+// Variable con la ubicación de las librerías necesarias para realizar el deploy de Natural.
+def libreriasDeploy = 'C:/workspaces/DevOpsNat/NO4Jenkins/deploy'
+
+
+// Variables que definen los datos del proyecto/aplicación
+def repositorioGit = 'PoCNatDevOps'
+def proyectoNatural = 'GISSPoCNatDevOps'
+
+// Variables que se calculan en el Pipe.
 // Variable con la puntuación obtenida en Kiuwan.
 def KiuwanScore
+// Variable con la petición de cambio generada por TPAI.
 def TpaiPeticionCambio
 
 pipeline {
@@ -22,8 +35,8 @@ pipeline {
 				checkout([$class: 'GitSCM',
 					branches: [[name: '*/main']],
 					extensions: [[$class: 'RelativeTargetDirectory',
-					relativeTargetDir: 'GISSPoCNatDevOps']],
-					userRemoteConfigs: [[url: 'https://github.com/RaulDeVicente/PoCNatDevOps.git']]])
+					relativeTargetDir: "${proyectoNatural}"]],
+					userRemoteConfigs: [[url: "${urlGit}/${repositorioGit}.git"]]])
 
 				echo "Finalizando CheckOut de Git"
 			}
@@ -36,9 +49,9 @@ pipeline {
 				script {
 
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
-						applicationName_dm: 'GISSPoCNatDevOps',
+						applicationName_dm: "${proyectoNatural}",
 						selectedMode: 'DELIVERY_MODE',
-						sourcePath: 'GISSPoCNatDevOps/GISSPoCNatDevOps/Natural-Libraries',
+						sourcePath: "${proyectoNatural}/${proyectoNatural}/Natural-Libraries",
 						indicateLanguages_dm: true,
 						languages_dm: 'natural',
 						timeout_dm: 30,
@@ -60,7 +73,7 @@ pipeline {
 				// C:\apache-ant-1.10.11\bin\ant.bat -file deploy.xml -Dnatural.ant.project.rootdir=../.. -lib C:\workspaces\DevOpsNat\NO4Jenkins\deploy build && exit %%ERRORLEVEL%%
 
 				script {
-					def Parametros = '-file GISSPoCNatDevOps/GISSPoCNatDevOps/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib C:/workspaces/DevOpsNat/NO4Jenkins/deploy build && exit %%ERRORLEVEL%%'
+					def Parametros = "-file ${proyectoNatural}/${proyectoNatural}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -113,23 +126,23 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas funcionales (ALM - UFT)"
 
-				node ('UFT_AGENT') {
+//				node ('UFT_AGENT') {
 
-					runFromAlmBuilder almServerName: 'ALMServer',
-						almDomain: 'CCD',
-						almProject: 'DEVOPS_PC',
-						almUserName: 'JENKINPC',
-						almPassword: 'JENKINPC01',
-						almRunMode: 'RUN_REMOTE',
-						almRunHost: '10.99.104.203',
-						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
-						almTimeout: '2000',
-						almClientID: '',
-						almRunResultsMode: '',
-						almApiKey: '',
-						isSSOEnabled: false	
+//					runFromAlmBuilder almServerName: 'ALMServer',
+//						almDomain: 'CCD',
+//						almProject: 'DEVOPS_PC',
+//						almUserName: 'JENKINPC',
+//						almPassword: 'JENKINPC01',
+//						almRunMode: 'RUN_REMOTE',
+//						almRunHost: '10.99.104.203',
+//						almTestSets: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
+//						almTimeout: '2000',
+//						almClientID: '',
+//						almRunResultsMode: '',
+//						almApiKey: '',
+//						isSSOEnabled: false	
 
-				}
+//				}
 
 				echo "Finalizando Pruebas funcionales (ALM - UFT)"
 			}

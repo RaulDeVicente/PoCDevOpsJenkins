@@ -1,36 +1,49 @@
 def Score
+def ejecutarPruebecillas = false
 
 pipeline {
 	agent any
 
 	stages {
 
-		stage ('Pruebecillas') {
+		stage ('Pruebecillas2') {
+            when {
+                expression { !ejecutarPruebecillas }
+            }
 			steps {
-				script {
-					def respuestaServico = httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
-						httpMode: 'POST',
-						customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_pruebaRespuestaServicio']],
-						timeout: 200,
-						requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
-						   <soapenv:Header/>
-						   <soapenv:Body>
-						      <ser:pruebaRespuestaServicio/>
-						   </soapenv:Body>
-						</soapenv:Envelope>''',
-						consoleLogResponseBody: true,
-				//		responseHandle: 'NONE',
-						validResponseContent: '<resultado>1</resultado>',
-						wrapAsMultipart: false
+				echo 'Entro en pruebecillas2'
+			}
+		}
 
-					println('Status: '+ respuestaServico.status)
-					println('Response: '+respuestaServico.content)
-					final int inicio = respuestaServico.content.indexOf('<peticionCambio>') + 16
-					final int fin = respuestaServico.content.indexOf('</peticionCambio>')
-					final peticionCambio = respuestaServico.content.substring(inicio, fin)
-					println('Petición de cambio: '+ peticionCambio)
+		stage ('Pruebecillas') {
+            when {
+                expression { ejecutarPruebecillas }
+            }
+			steps {
+				echo 'Entro en pruebecillas'
+//				script {
+//					def respuestaServico = httpRequest url: 'http://g99dnsa824-ld.portal.ss:15555/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port',
+//						httpMode: 'POST',
+//						customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_pruebaRespuestaServicio']],
+//						timeout: 200,
+//						requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
+//						   <soapenv:Header/>
+//						   <soapenv:Body>
+//						      <ser:pruebaRespuestaServicio/>
+//						   </soapenv:Body>
+//						</soapenv:Envelope>''',
+//						consoleLogResponseBody: true,
+//						validResponseContent: '<resultado>1</resultado>',
+//						wrapAsMultipart: false
+
+//					println('Status: '+ respuestaServico.status)
+//					println('Response: '+respuestaServico.content)
+//					final int inicio = respuestaServico.content.indexOf('<peticionCambio>') + 16
+//					final int fin = respuestaServico.content.indexOf('</peticionCambio>')
+//					final peticionCambio = respuestaServico.content.substring(inicio, fin)
+//					println('Petición de cambio: '+ peticionCambio)
 					
-				}
+//				}
 
 //			    node ('UFT_AGENT') {
 				

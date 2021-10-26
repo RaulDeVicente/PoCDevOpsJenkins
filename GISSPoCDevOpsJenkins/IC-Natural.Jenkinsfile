@@ -28,9 +28,9 @@ def TpaiPeticionCambio
 
 // Variables para decidir qué stage se ejecutan
 def ejecutarCheckout = true
-def ejecutarKiuwan = true
+def ejecutarKiuwan = false
 def ejecutarDeploy = true
-def ejecutarTPAI = true
+def ejecutarTPAI = false
 def ejecutarUnitTest = false
 def ejecutarUFT = false
 

@@ -27,15 +27,24 @@ def TpaiPeticionCambio
 
 
 // Variables para decidir qué stage se ejecutan
-def ejecutarCheckout = true
-def ejecutarKiuwan = false
-def ejecutarDeploy = true
-def ejecutarTPAI = false
-def ejecutarUnitTest = false
-def ejecutarUFT = false
+//def ejecutarCheckout = true
+//def ejecutarKiuwan = false
+//def ejecutarDeploy = true
+//def ejecutarTPAI = false
+//def ejecutarUnitTest = false
+//def ejecutarUFT = false
 
 
 pipeline {
+	parameters {
+		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
+		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
+		booleanParam(name: 'EJECUTAR_DEPLOY', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Deploy en desarrollo.')
+		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: true, description: 'Define si se deben ejecutar los Stage de TPAI.')
+		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
+		booleanParam(name: 'EJECUTAR_UFT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
+	}
+
 	agent any
 
 	tools {
@@ -46,7 +55,7 @@ pipeline {
 
 		stage('CheckOut Natural Git') {
 			when {
-				expression { ejecutarCheckout }
+				expression { params.EJECUTAR_CHECKOUT }
 			}
 			steps {
 				echo "Iniciando CheckOut de Git"
@@ -65,7 +74,7 @@ pipeline {
 
 		stage('Análisis de código (Kiuwan)') {
 			when {
-				expression { ejecutarKiuwan }
+				expression { params.EJECUTAR_KIUWAN }
 			}
 			steps {
 				echo "Iniciando Análisis de código (Kiuwan)"
@@ -91,7 +100,7 @@ pipeline {
 
 		stage('Deploy en Desarrollo') {
 			when {
-				expression { ejecutarDeploy }
+				expression { params.EJECUTAR_DEPLOY }
 			}
 			steps {
 				echo "Iniciando Deploy en Desarrollo"
@@ -117,7 +126,7 @@ pipeline {
 
 		stage('Arrancando monitorización Adabas (TPAI)') {
 			when {
-				expression { ejecutarTPAI }
+				expression { params.EJECUTAR_TPAI }
 			}
 			steps {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
@@ -143,7 +152,7 @@ pipeline {
 
 		stage('Pruebas unitarias (Natural Unit Test)') {
 			when {
-				expression { ejecutarUnitTest }
+				expression { params.EJECUTAR_UNIT_TEST }
 			}
 			steps {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
@@ -157,7 +166,7 @@ pipeline {
 
 		stage('Pruebas funcionales (ALM - UFT)') {
 			when {
-				expression { ejecutarUFT }
+				expression { params.EJECUTAR_UFT }
 			}
 			steps {
 				echo "Iniciando Pruebas funcionales (ALM - UFT)"
@@ -186,7 +195,7 @@ pipeline {
 
 		stage('Parando monitorización Adabas (TPAI)') {
 			when {
-				expression { ejecutarTPAI }
+				expression { params.EJECUTAR_TPAI }
 			}
 			steps {
 				echo "Iniciando parada monitorización Adabas (TPAI)"
@@ -212,7 +221,7 @@ pipeline {
 
 		stage('Obteniendo análisis monitorización Adabas (TPAI)') {
 			when {
-				expression { ejecutarTPAI }
+				expression { params.EJECUTAR_TPAI }
 			}
 			steps {
 				echo "Iniciando análisis monitorización Adabas (TPAI)"

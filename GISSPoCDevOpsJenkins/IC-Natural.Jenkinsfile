@@ -1,6 +1,6 @@
 // Pipeline de la PoC del IC de las aplicaciones Natural.
 
-// Constantes:
+// Constantes, estas variables deberán estar definidas como variables de entorno de Jenkins:
 // Variable con la URL de acceso a Git.
 def urlGit = 'https://github.com/RaulDeVicente'
 // Variable con la ubicación de las librerías necesarias para realizar el deploy de Natural.
@@ -24,15 +24,6 @@ def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
 def KiuwanScore
 // Variable con la petición de cambio generada por TPAI.
 def TpaiPeticionCambio
-
-
-// Variables para decidir qué stage se ejecutan
-//def ejecutarCheckout = true
-//def ejecutarKiuwan = false
-//def ejecutarDeploy = true
-//def ejecutarTPAI = false
-//def ejecutarUnitTest = false
-//def ejecutarUFT = false
 
 
 pipeline {

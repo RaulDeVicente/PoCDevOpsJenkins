@@ -17,6 +17,7 @@ def uftProyecto = 'DEVOPS_PC'
 def uftUsuario = 'JENKINPC'
 def uftPassword = 'JENKINPC01'
 def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
+def uftEjecutor = '10.99.104.203'
 
 
 // Variables que se calculan en el Pipe.
@@ -124,17 +125,54 @@ pipeline {
 
 				httpRequest url: "${urlWebMethods}/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port",
 					httpMode: 'POST',
-					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ne@Rtdo_tpai_ws_tpaiService_Binder_iniciarMonitores']],
+					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_iniciarPrueba']],
 					timeout: 200,
-					requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
-					   <soapenv:Header/>
-					   <soapenv:Body>
-					      <ser:iniciarMonitores/>
-					   </soapenv:Body>
-					</soapenv:Envelope>''',
+					requestBody: '''
+						<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
+						   <soapenv:Header/>
+						   <soapenv:Body>
+						      <ser:iniciarPrueba>
+						         <aplicacion>GISSPoCNatDevOps</aplicacion>
+						         <version>1.1.1.1</version>
+						         <elementos>
+						            <!--1 or more repetitions:-->
+						            <libreria>
+						               <nombre>NTDEVOPS</nombre>
+						               <modulos>
+						                  <!--1 or more repetitions:-->
+						                  <modulo>POCQHIJ1</modulo>
+						                  <modulo>POCQHIJ2</modulo>
+						                  <modulo>POCQHIJ3</modulo>
+						                  <modulo>POCMCALC</modulo>
+						                  <modulo>POCNHIJ1</modulo>
+						                  <modulo>POCNHIJ2</modulo>
+						                  <modulo>POCNHIJ3</modulo>
+						                  <modulo>POCPCALC</modulo>
+						               </modulos>
+						            </libreria>
+						         </elementos>
+						         <pruebas>
+						            <!--1 or more repetitions:-->
+						            <prueba>
+						               <tipoPrueba>O</tipoPrueba>
+						               <alcance>1</alcance>
+						               <elemento>TESTT</elemento>
+						               <usuario>IDUSE306</usuario>
+						            </prueba>
+						            <prueba>
+						               <tipoPrueba>P</tipoPrueba>
+						               <alcance>1</alcance>
+						               <elemento>PRPI</elemento>
+						               <usuario>IDUSE343</usuario>
+						            </prueba>
+						         </pruebas>
+						      </ser:iniciarPrueba>
+						   </soapenv:Body>
+						</soapenv:Envelope>
+						''',
 					consoleLogResponseBody: true,
 			//		responseHandle: 'NONE',
-					validResponseContent: '<resultado>1</resultado>',
+					validResponseContent: '<codRetorno>0</codRetorno>',
 					wrapAsMultipart: false
 
 				echo "Finalizando arranque monitorización Adabas (TPAI)"
@@ -170,14 +208,14 @@ pipeline {
 						almUserName: "${uftUsuario}",
 						almPassword: "${uftPassword}",
 						almRunMode: 'RUN_REMOTE',
-						almRunHost: '10.99.104.203',
+						almRunHost: "${uftEjecutor}",
 						almTestSets: "${uftTestSets}",
 						almTimeout: '2000',
 						almClientID: '',
 						almRunResultsMode: '',
 						almApiKey: '',
 						isSSOEnabled: false	
-
+uftEjecutor
 				}
 
 				echo "Finalizando Pruebas funcionales (ALM - UFT)"
@@ -193,17 +231,21 @@ pipeline {
 
 				httpRequest url: "${urlWebMethods}/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port",
 					httpMode: 'POST',
-					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_pararMonitores']],
+					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_finalizarPrueba']],
 					timeout: 200,
-					requestBody: '''<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
-					   <soapenv:Header/>
-					   <soapenv:Body>
-					      <ser:pararMonitores/>
-					   </soapenv:Body>
-					</soapenv:Envelope>''',
+					requestBody: '''
+						<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
+						   <soapenv:Header/>
+						   <soapenv:Body>
+						      <ser:finalizarPrueba>
+						         <ticketPrueba>4927</ticketPrueba>
+						      </ser:finalizarPrueba>
+						   </soapenv:Body>
+						</soapenv:Envelope>
+						''',
 					consoleLogResponseBody: true,
 //					responseHandle: 'NONE',
-					validResponseContent: '<resultado>1</resultado>',
+					validResponseContent: '<codRetorno>0</codRetorno>',
 					wrapAsMultipart: false
 
 				echo "Finalizando parada monitorización Adabas (TPAI)"

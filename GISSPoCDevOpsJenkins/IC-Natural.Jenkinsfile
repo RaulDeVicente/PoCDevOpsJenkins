@@ -12,6 +12,7 @@ def urlWebMethods = 'http://g99dnsa824-ld.portal.ss:15555'
 // Variables que definen los datos del proyecto/aplicación
 def gitRepositorio = 'PoCNatDevOps'
 def naturalProyecto = 'GISSPoCNatDevOps'
+def version = "1.1.1.${env.BUILD_ID}"
 def uftDominio = 'CCD'
 def uftProyecto = 'DEVOPS_PC'
 def uftUsuario = 'JENKINPC'
@@ -125,7 +126,7 @@ pipeline {
 
 				script {
 					tpaiIniciaPrueba aplicacion: 'GISSPOCNATDEVOPS',
-						version: '1.1.1.1',
+						version: "${version}",
 						rutaFichero: 'C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\IC de Natural\\GISSPoCNatDevOps\\GISSPoCNatDevOps',
 						patronFichero: 'history_deploy_GISSPoCNatDevOps',
 						repPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],

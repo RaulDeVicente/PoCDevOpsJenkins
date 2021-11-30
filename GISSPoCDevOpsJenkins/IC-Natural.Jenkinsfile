@@ -123,6 +123,7 @@ pipeline {
 			}
 			steps {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
+				echo "Antes Workspace: ${env.WORKSPACE}"
 
 				script {
 					tpaiIniciaPrueba aplicacion: 'GISSPOCNATDEVOPS',
@@ -132,7 +133,9 @@ pipeline {
 						repPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
 									[alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
 	
+				echo "Después Workspace: ${env.WORKSPACE}"
 					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/output_${env.BUILD_ID}.json"
+
 					TPAI_Ticket = tpaiOutput.ticketPrueba
 				}
 

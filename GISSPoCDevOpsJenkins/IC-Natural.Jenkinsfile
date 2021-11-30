@@ -23,8 +23,8 @@ def uftEjecutor = '10.99.104.203'
 // Variables que se calculan en el Pipe.
 // Variable con la puntuación obtenida en Kiuwan.
 def KiuwanScore
-// Variable con la petición de cambio generada por TPAI.
-def TpaiPeticionCambio
+// Variable con el Ticket generada por TPAI.
+def TPAI_Ticket
 
 
 pipeline {
@@ -123,59 +123,17 @@ pipeline {
 			steps {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
 
-				httpRequest url: "${urlWebMethods}/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port",
-					httpMode: 'POST',
-					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_iniciarPrueba']],
-					timeout: 200,
-					requestBody: '''
-						<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
-						   <soapenv:Header/>
-						   <soapenv:Body>
-						      <ser:iniciarPrueba>
-						         <aplicacion>GISSPoCNatDevOps</aplicacion>
-						         <version>1.1.1.1</version>
-						         <elementos>
-						            <!--1 or more repetitions:-->
-						            <libreria>
-						               <nombre>NTDEVOPS</nombre>
-						               <modulos>
-						                  <!--1 or more repetitions:-->
-						                  <modulo>POCQHIJ1</modulo>
-						                  <modulo>POCQHIJ2</modulo>
-						                  <modulo>POCQHIJ3</modulo>
-						                  <modulo>POCMCALC</modulo>
-						                  <modulo>POCNHIJ1</modulo>
-						                  <modulo>POCNHIJ2</modulo>
-						                  <modulo>POCNHIJ3</modulo>
-						                  <modulo>POCPCALC</modulo>
-						               </modulos>
-						            </libreria>
-						         </elementos>
-						         <pruebas>
-						            <!--1 or more repetitions:-->
-						            <prueba>
-						               <tipoPrueba>O</tipoPrueba>
-						               <alcance>1</alcance>
-						               <elemento>TESTT</elemento>
-						               <usuario>IDUSE306</usuario>
-						            </prueba>
-						            <prueba>
-						               <tipoPrueba>P</tipoPrueba>
-						               <alcance>1</alcance>
-						               <elemento>PRPI</elemento>
-						               <usuario>IDUSE343</usuario>
-						            </prueba>
-						         </pruebas>
-						      </ser:iniciarPrueba>
-						   </soapenv:Body>
-						</soapenv:Envelope>
-						''',
-					consoleLogResponseBody: true,
-			//		responseHandle: 'NONE',
-					validResponseContent: '<codRetorno>0</codRetorno>',
-					wrapAsMultipart: false
+				tpaiIniciaPrueba aplicacion: 'GISSPOCNATDEVOPS',
+					version: '1.1.1.1',
+					rutaFichero: 'C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\IC de Natural\\GISSPoCNatDevOps\\GISSPoCNatDevOps',
+					patronFichero: 'history_deploy_GISSPoCNatDevOps',
+					repPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
+								[alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
 
-				echo "Finalizando arranque monitorización Adabas (TPAI)"
+				def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/output_${env.BUILD_ID}.json"
+				TPAI_Ticket = tpaiOutput.ticketPrueba
+
+				echo "Finalizando arranque monitorización Adabas (TPAI) con el Ticket ${TPAI_Ticket}"
 			}
 		}
 
@@ -215,7 +173,7 @@ pipeline {
 						almRunResultsMode: '',
 						almApiKey: '',
 						isSSOEnabled: false	
-uftEjecutor
+
 				}
 
 				echo "Finalizando Pruebas funcionales (ALM - UFT)"
@@ -227,26 +185,9 @@ uftEjecutor
 				expression { params.EJECUTAR_TPAI }
 			}
 			steps {
-				echo "Iniciando parada monitorización Adabas (TPAI)"
+				echo "Iniciando parada monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
 
-				httpRequest url: "${urlWebMethods}/ws/giss.ccd.natDevOps.ntdo.tpai.ws:tpaiService/giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Port",
-					httpMode: 'POST',
-					customHeaders: [[maskValue: false, name: 'SOAPAction', value: 'giss_ccd_natDevOps_ntdo_tpai_ws_tpaiService_Binder_finalizarPrueba']],
-					timeout: 200,
-					requestBody: '''
-						<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://seg-social.es/ccd/tpai/service">
-						   <soapenv:Header/>
-						   <soapenv:Body>
-						      <ser:finalizarPrueba>
-						         <ticketPrueba>4927</ticketPrueba>
-						      </ser:finalizarPrueba>
-						   </soapenv:Body>
-						</soapenv:Envelope>
-						''',
-					consoleLogResponseBody: true,
-//					responseHandle: 'NONE',
-					validResponseContent: '<codRetorno>0</codRetorno>',
-					wrapAsMultipart: false
+				tpaiFinalizaPrueba "${TPAI_Ticket}"
 
 				echo "Finalizando parada monitorización Adabas (TPAI)"
 			}
@@ -257,7 +198,7 @@ uftEjecutor
 				expression { params.EJECUTAR_TPAI }
 			}
 			steps {
-				echo "Iniciando análisis monitorización Adabas (TPAI)"
+				echo "Iniciando análisis monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
 
 
 				echo "Finalizando análisis monitorización Adabas (TPAI)"

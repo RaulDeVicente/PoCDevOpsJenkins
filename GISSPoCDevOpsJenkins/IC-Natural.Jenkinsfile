@@ -172,7 +172,7 @@ pipeline {
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: "${uftEjecutor}",
 						almTestSets: "${uftTestSets}",
-						almTimeout: '2000',
+						almTimeout: '3000',
 						almClientID: '',
 						almRunResultsMode: '',
 						almApiKey: '',

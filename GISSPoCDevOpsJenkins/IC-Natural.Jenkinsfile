@@ -123,15 +123,17 @@ pipeline {
 			steps {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
 
-				tpaiIniciaPrueba aplicacion: 'GISSPOCNATDEVOPS',
-					version: '1.1.1.1',
-					rutaFichero: 'C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\IC de Natural\\GISSPoCNatDevOps\\GISSPoCNatDevOps',
-					patronFichero: 'history_deploy_GISSPoCNatDevOps',
-					repPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
-								[alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
-
-				def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/output_${env.BUILD_ID}.json"
-				TPAI_Ticket = tpaiOutput.ticketPrueba
+				script {
+					tpaiIniciaPrueba aplicacion: 'GISSPOCNATDEVOPS',
+						version: '1.1.1.1',
+						rutaFichero: 'C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\IC de Natural\\GISSPoCNatDevOps\\GISSPoCNatDevOps',
+						patronFichero: 'history_deploy_GISSPoCNatDevOps',
+						repPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
+									[alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
+	
+					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/output_${env.BUILD_ID}.json"
+					TPAI_Ticket = tpaiOutput.ticketPrueba
+				}
 
 				echo "Finalizando arranque monitorización Adabas (TPAI) con el Ticket ${TPAI_Ticket}"
 			}

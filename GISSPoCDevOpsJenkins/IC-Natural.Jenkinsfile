@@ -54,7 +54,6 @@ pipeline {
 				echo "Iniciando CheckOut de Git"
 
 				// Obtiene el código del GitHub repository
-				// git branch:'main', url: 'https://github.com/RaulDeVicente/PoCNatDevOps.git'
 				checkout([$class: 'GitSCM',
 					branches: [[name: '*/main']],
 					extensions: [[$class: 'RelativeTargetDirectory',
@@ -99,8 +98,6 @@ pipeline {
 				echo "Iniciando Deploy en Desarrollo"
 
 				// Despliega el código en el servidor de Natural.
-				// C:\apache-ant-1.10.11\bin\ant.bat -file deploy.xml -Dnatural.ant.project.rootdir=../.. -lib C:\workspaces\DevOpsNat\NO4Jenkins\deploy build && exit %%ERRORLEVEL%%
-
 				script {
 					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
@@ -125,13 +122,31 @@ pipeline {
 				echo "Iniciando arranque monitorización Adabas (TPAI)"
 
 				script {
-					tpaiIniciaPrueba aplicacion: 'GISSPOCNATDEVOPS',
+
+					tpaiIniciaPrueba aplicacion: "${naturalProyecto}",
 						version: "${version}",
-						rutaFichero: 'C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\IC de Natural\\GISSPoCNatDevOps\\GISSPoCNatDevOps',
-						patronFichero: 'history_deploy_GISSPoCNatDevOps',
-						repPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
-									[alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
-	
+						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
+						patronFichero: 'history_deploy_',
+						estadoPruebas: 'Unstable',
+						selSoloModulosModificados: 'true',
+						selTodosTiposModulos: 'false',
+						selModulosProgram: true,
+						selModulosSubprogram: true,
+						selModulosSubroutine: true,
+						selModulosFunction: true,
+						selModulosClass: true,
+						selModulosCopycode: true,
+						selModulosDataDefinitionModule: false,
+						selModulosDialog: false,
+						selModulosGlobalDataArea: false,
+						selModulosHelproutine: false,
+						selModulosLocalDataArea: false,
+						selModulosMap: false,
+						selModulosParameterDataArea: false,
+						selModulosText: false,
+						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
+									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
+
 					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/output_${env.BUILD_ID}.json"
 
 					TPAI_Ticket = tpaiOutput.ticketPrueba
@@ -191,7 +206,8 @@ pipeline {
 			steps {
 				echo "Iniciando parada monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
 
-				tpaiFinalizaPrueba "${TPAI_Ticket}"
+				tpaiFinalizaPrueba ticketPrueba: "${TPAI_Ticket}",
+					estadoRetorno: 'Unstable'
 
 				echo "Finalizando parada monitorización Adabas (TPAI)"
 			}

@@ -180,6 +180,7 @@ pipeline {
 				node ('UFT_AGENT') {
 
 					runFromAlmBuilder almServerName: 'ALMServer',
+						almCredentialsScope: 'JOB',
 						almDomain: "${uftDominio}",
 						almProject: "${uftProyecto}",
 						almUserName: "${uftUsuario}",

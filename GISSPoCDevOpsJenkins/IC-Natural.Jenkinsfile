@@ -147,7 +147,7 @@ pipeline {
 						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
 									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
 
-					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/output_${env.BUILD_ID}.json"
+					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/iniciarPruebaOutput_${env.BUILD_ID}.json"
 
 					TPAI_Ticket = tpaiOutput.ticketPrueba
 				}

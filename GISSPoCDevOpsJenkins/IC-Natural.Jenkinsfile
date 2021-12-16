@@ -130,7 +130,7 @@ pipeline {
 						version: "${version}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
-						estadoPruebas: 'Unstable',
+						estadoRetorno: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'true'
 
@@ -159,7 +159,7 @@ pipeline {
 						version: "${version}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
-						estadoPruebas: 'Unstable',
+						estadoPruebas: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'false',
 						selModulosProgram: true,

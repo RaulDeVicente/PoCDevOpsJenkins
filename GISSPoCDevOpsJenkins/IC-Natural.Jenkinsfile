@@ -136,7 +136,7 @@ pipeline {
 
 					def promNatOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
 
-					PromNatRetorno = promNatOutput.codigoRetorno
+					PromNatRetorno = promNatOutput.codRetorno
 				}
 
 				echo "Finalizando Entregar a Promoción Natural con resultado ${PromNatRetorno}"

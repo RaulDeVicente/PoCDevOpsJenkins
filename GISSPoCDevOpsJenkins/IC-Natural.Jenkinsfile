@@ -26,6 +26,8 @@ def uftEjecutor = '10.99.104.203'
 def KiuwanScore
 // Variable con el Ticket generada por TPAI.
 def TPAI_Ticket
+// Variable con el Código de Resultado de la Entrega a la Promoción Natural.
+def PromNatRetorno
 
 
 pipeline {
@@ -33,6 +35,7 @@ pipeline {
 		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
 		booleanParam(name: 'EJECUTAR_DEPLOY', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Deploy en desarrollo.')
+		booleanParam(name: 'EJECUTAR_ENTREGA', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Entregar a Promoción Natural.')
 		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: false, description: 'Define si se deben ejecutar los Stage de TPAI.')
 		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
@@ -113,6 +116,35 @@ pipeline {
 				echo "Finalizando Deploy en Desarrollo"
 			}
 		}
+
+		stage('Entregar a Promoción Natural') {
+			when {
+				expression { params.EJECUTAR_ENTREGA }
+			}
+			steps {
+				echo "Iniciando Entregar a Promoción Natural"
+
+				// Despliega el código en el servidor de Natural.
+				script {
+					entregarRelease aplicacion: "${naturalProyecto}",
+						version: "${version}",
+						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
+						patronFichero: 'history_deploy_',
+						estadoPruebas: 'Unstable',
+						selSoloModulosModificados: 'true',
+						selTodosTiposModulos: 'true'
+
+					def promNatOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
+
+					PromNatRetorno = promNatOutput.codigoRetorno
+				}
+
+				echo "Finalizando Entregar a Promoción Natural con resultado ${PromNatRetorno}"
+			}
+		}
+
+
+
 
 		stage('Arrancando monitorización Adabas (TPAI)') {
 			when {

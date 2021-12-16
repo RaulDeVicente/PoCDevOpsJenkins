@@ -11,6 +11,7 @@ def urlWebMethods = 'http://g99dnsa824-ld.portal.ss:15555'
 
 // Variables que definen los datos del proyecto/aplicación
 def gitRepositorio = 'PoCNatDevOps'
+def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
 def version = "1.1.1.${env.BUILD_ID}"
 def uftDominio = 'CCD'
@@ -126,7 +127,7 @@ pipeline {
 
 				// Despliega el código en el servidor de Natural.
 				script {
-					entregarRelease aplicacion: "${naturalProyecto}",
+					entregarRelease aplicacion: "${codigoAplicacion}",
 						version: "${version}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
@@ -155,7 +156,7 @@ pipeline {
 
 				script {
 
-					tpaiIniciaPrueba aplicacion: "${naturalProyecto}",
+					tpaiIniciaPrueba aplicacion: "${codigoAplicacion}",
 						version: "${version}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',

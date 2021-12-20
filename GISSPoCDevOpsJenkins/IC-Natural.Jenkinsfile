@@ -58,25 +58,24 @@ pipeline {
 				echo "Iniciando CheckOut de Git"
 
 				// Obtiene el código del GitHub repository con el Plugin de GIT
-//				checkout([$class: 'GitSCM',
-//					branches: [[name: '*/main']],
-//					extensions: [[$class: 'RelativeTargetDirectory',
-//					relativeTargetDir: "${naturalProyecto}"]],
-//					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
+				checkout([$class: 'GitSCM',
+					branches: [[name: '*/main']],
+					extensions: [[$class: 'RelativeTargetDirectory',
+					relativeTargetDir: "${naturalProyecto}"]],
+					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
 
 				// Obtiene el código del GitHub repository con el Ant de NaturalOne
-				script {
-					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} update && exit %%ERRORLEVEL%%"
-					withAnt(installation: 'Ant Local', jdk: 'Java') {
-						if (isUnix()) {
-							sh "ant ${Parametros}"
-						}
-						else {
-							bat "ant ${Parametros}"
-						}
-					}
-				}
-
+//				script {
+//					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} update && exit %%ERRORLEVEL%%"
+//					withAnt(installation: 'Ant Local', jdk: 'Java') {
+//						if (isUnix()) {
+//							sh "ant ${Parametros}"
+//						}
+//						else {
+//							bat "ant ${Parametros}"
+//						}
+//					}
+//				}
 
 				echo "Finalizando CheckOut de Git"
 			}

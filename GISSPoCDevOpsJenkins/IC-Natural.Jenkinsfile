@@ -66,7 +66,7 @@ pipeline {
 
 				// Obtiene el código del GitHub repository con el Ant de NaturalOne
 				script {
-					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} checkout && exit %%ERRORLEVEL%%"
+					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} update && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"

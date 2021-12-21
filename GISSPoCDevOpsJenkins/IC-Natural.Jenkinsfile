@@ -39,8 +39,8 @@ pipeline {
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
 		booleanParam(name: 'EJECUTAR_DEPLOY', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Deploy en desarrollo.')
 		booleanParam(name: 'EJECUTAR_ENTREGA', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Entregar a Promoción Natural.')
-		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: false, description: 'Define si se deben ejecutar los Stage de TPAI.')
 		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
+		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: false, description: 'Define si se deben ejecutar los Stage de TPAI.')
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
 	}
 
@@ -159,8 +159,28 @@ pipeline {
 			}
 		}
 
+		stage('Pruebas unitarias (Natural Unit Test)') {
+			when {
+				expression { params.EJECUTAR_UNIT_TEST }
+			}
+			steps {
+				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
+				script {
+					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
+					withAnt(installation: 'Ant Local', jdk: 'Java') {
+						if (isUnix()) {
+							sh "ant ${Parametros}"
+						}
+						else {
+							bat "ant ${Parametros}"
+						}
+					}
+				}
 
+				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
+			}
+		}
 
 		stage('Arrancando monitorización Adabas (TPAI)') {
 			when {
@@ -201,29 +221,6 @@ pipeline {
 				}
 
 				echo "Finalizando arranque monitorización Adabas (TPAI) con el Ticket ${TPAI_Ticket}"
-			}
-		}
-
-		stage('Pruebas unitarias (Natural Unit Test)') {
-			when {
-				expression { params.EJECUTAR_UNIT_TEST }
-			}
-			steps {
-				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
-
-				script {
-					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
-					withAnt(installation: 'Ant Local', jdk: 'Java') {
-						if (isUnix()) {
-							sh "ant ${Parametros}"
-						}
-						else {
-							bat "ant ${Parametros}"
-						}
-					}
-				}
-
-				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}
 		}
 

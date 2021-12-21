@@ -5,6 +5,8 @@
 def urlGit = 'https://github.com/RaulDeVicente'
 // Variable con la ubicación de las librerías necesarias para realizar el deploy de Natural.
 def libreriasDeploy = 'C:/workspaces/DevOpsNat/NO4Jenkins/deploy'
+// Variable con la ubicación de las librerías necesarias para realizar el Unit Test de Natural.
+def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 // Variable con la URL de webMethods.
 def urlWebMethods = 'http://g99dnsa824-ld.portal.ss:15555'
 
@@ -209,8 +211,17 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
-//				bat "C:/Users/99gu2142/git/PoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
-//				bat "GISSPoCNatDevOps/GISSPoCNatDevOps/runUnitTest.cmd"
+				script {
+					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest2.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=."
+					withAnt(installation: 'Ant Local', jdk: 'Java') {
+						if (isUnix()) {
+							sh "ant ${Parametros}"
+						}
+						else {
+							bat "ant ${Parametros}"
+						}
+					}
+				}
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

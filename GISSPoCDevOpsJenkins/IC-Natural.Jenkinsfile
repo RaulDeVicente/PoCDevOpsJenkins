@@ -39,6 +39,7 @@ pipeline {
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
 		booleanParam(name: 'EJECUTAR_DEPLOY', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Deploy en desarrollo.')
 		booleanParam(name: 'EJECUTAR_ENTREGA', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Entregar a Promoción Natural.')
+		booleanParam(name: 'EJECUTAR_INSTALACION', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Instalar en Integración Continua.')
 		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
 		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: false, description: 'Define si se deben ejecutar los Stage de TPAI.')
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
@@ -140,7 +141,7 @@ pipeline {
 			steps {
 				echo "Iniciando Entregar a Promoción Natural"
 
-				// Despliega el código en el servidor de Natural.
+				// Ejecuta el servicio de entrega de Release.
 				script {
 					entregarRelease aplicacion: "${codigoAplicacion}",
 						version: "${version}",
@@ -156,6 +157,29 @@ pipeline {
 				}
 
 				echo "Finalizando Entregar a Promoción Natural con resultado ${PromNatRetorno}"
+			}
+		}
+
+		stage('Instalar en Integración Continua') {
+			when {
+				expression { params.EJECUTAR_INSTALACION }
+			}
+			steps {
+				echo "Iniciando Instalar en Integración Continua"
+
+				// Ejecuta el servicio de instalación en un entorno.
+				script {
+					desplegarRelease aplicacion: "${codigoAplicacion}",
+						version: "${version}",
+						entornoDestino: 'IC',
+						estadoRetorno: 'Failure'
+
+					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
+
+					instalarRetorno = instalarOutput.codRetorno
+				}
+
+				echo "Finalizando Instalar en Integración Continua con resultado ${instalarRetorno}"
 			}
 		}
 

@@ -13,7 +13,7 @@ def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
-def version = "1.1.1.${env.BUILD_ID}"
+def release = "1.1.1.${env.BUILD_ID}"
 def uftDominio = 'CCD'
 def uftProyecto = 'DEVOPS_PC'
 def uftUsuario = 'JENKINPC'
@@ -28,16 +28,16 @@ def KiuwanScore
 // Variable con el Ticket generada por TPAI.
 def TPAI_Ticket
 // Variable con el Código de Resultado de la Entrega a la Promoción Natural.
-def PromNatRetorno
+def entregaRetorno
+// Variable con el Código de Resultado de la Instalación en CE.
+def instalarRetorno
 
 
 pipeline {
 	parameters {
 		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
-		booleanParam(name: 'EJECUTAR_DEPLOY', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Deploy en desarrollo.')
-		booleanParam(name: 'EJECUTAR_ENTREGA', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Entregar a Promoción Natural.')
-		booleanParam(name: 'EJECUTAR_INSTALACION', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Instalar en Integración Continua.')
+		booleanParam(name: 'EJECUTAR_DEPLOYCE', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Despliegue en CE.')
 		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
 		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: false, description: 'Define si se deben ejecutar los Stage de TPAI.')
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
@@ -58,6 +58,7 @@ pipeline {
 			steps {
 				echo "Iniciando CheckOut de Git"
 
+// TODO Cambiar la rama.
 				// Obtiene el código del GitHub repository con el Plugin de GIT
 				checkout([$class: 'GitSCM',
 					branches: [[name: '*/main']],
@@ -91,6 +92,7 @@ pipeline {
 
 				script {
 
+// TODO Cambiar el modo a Baseline
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName_dm: "${naturalProyecto}",
 						selectedMode: 'DELIVERY_MODE',
@@ -108,15 +110,17 @@ pipeline {
 			}
 		}
 
-		stage('Deploy en Desarrollo') {
+		stage('Despliegue en CE') {
 			when {
-				expression { params.EJECUTAR_DEPLOY }
+				expression { params.EJECUTAR_DEPLOYCE }
 			}
 			steps {
-				echo "Iniciando Deploy en Desarrollo"
+				echo "Iniciando Despliegue en CE"
 
 				// Despliega el código en el servidor de Natural.
 				script {
+// TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
+					echo "Se ejecuta el Deploy de Natural en las librerías de entrega"
 					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
@@ -128,48 +132,28 @@ pipeline {
 					}
 				}
 
-				echo "Finalizando Deploy en Desarrollo"
-			}
-		}
-
-		stage('Entregar a Promoción Natural') {
-			when {
-				expression { params.EJECUTAR_ENTREGA }
-			}
-			steps {
-				echo "Iniciando Entregar a Promoción Natural"
-
 				// Ejecuta el servicio de entrega de Release.
 				script {
+					echo "Se ejecuta la Entrega de Release a Promoción Natural"
 					entregarRelease aplicacion: "${codigoAplicacion}",
-						version: "${version}",
+						version: "${release}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
 						estadoRetorno: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'true'
 
-					def promNatOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
+					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
 
-					PromNatRetorno = promNatOutput.codRetorno
+					entregaRetorno = entregaOutput.codRetorno
 				}
 
-				echo "Finalizando Entregar a Promoción Natural con resultado ${PromNatRetorno}"
-			}
-		}
-
-		stage('Instalar en Integración Continua') {
-			when {
-				expression { params.EJECUTAR_INSTALACION }
-			}
-			steps {
-				echo "Iniciando Instalar en Integración Continua"
-
-				// Ejecuta el servicio de instalación en un entorno.
+				// Ejecuta la instalación de la release en el entorno de CE
 				script {
+					echo "Se ejecuta la instalación de la release en el entorno de CE"
 					desplegarRelease aplicacion: "${codigoAplicacion}",
-						version: "${version}",
-						entornoDestino: 'IC',
+						version: "${release}",
+						entornoDestino: 'CE',
 						estadoRetorno: 'Failure'
 
 					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
@@ -177,7 +161,7 @@ pipeline {
 					instalarRetorno = instalarOutput.codRetorno
 				}
 
-				echo "Finalizando Instalar en Integración Continua con resultado ${instalarRetorno}"
+				echo "Finalizando Despliegue en CE"
 			}
 		}
 
@@ -189,6 +173,7 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
+// TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
@@ -214,7 +199,7 @@ pipeline {
 				script {
 
 					tpaiIniciaPrueba aplicacion: "${codigoAplicacion}",
-						version: "${version}",
+						version: "${release}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
 						estadoPruebas: 'Failure',

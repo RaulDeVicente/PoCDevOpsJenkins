@@ -13,34 +13,24 @@ def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
-def version = "1.1.1.${env.BUILD_ID}"
-def uftDominio = 'CCD'
-def uftProyecto = 'DEVOPS_PC'
-def uftUsuario = 'JENKINPC'
-def uftPassword = 'JENKINPC01'
-def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
-def uftEjecutor = '10.99.104.203'
+def release = "IC.${env.BUILD_ID}"
 
 
 // Variables que se calculan en el Pipe.
 // Variable con la puntuación obtenida en Kiuwan.
 def KiuwanScore
-// Variable con el Ticket generada por TPAI.
-def TPAI_Ticket
 // Variable con el Código de Resultado de la Entrega a la Promoción Natural.
-def PromNatRetorno
+def entregaRetorno
+// Variable con el Código de Resultado de la Instalación en IC.
+def instalarRetorno
 
 
 pipeline {
 	parameters {
 		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
-		booleanParam(name: 'EJECUTAR_DEPLOY', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Deploy en desarrollo.')
-		booleanParam(name: 'EJECUTAR_ENTREGA', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Entregar a Promoción Natural.')
-		booleanParam(name: 'EJECUTAR_INSTALACION', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Instalar en Integración Continua.')
+		booleanParam(name: 'EJECUTAR_DEPLOYIC', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Despliegue en IC.')
 		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
-		booleanParam(name: 'EJECUTAR_TPAI', defaultValue: false, description: 'Define si se deben ejecutar los Stage de TPAI.')
-		booleanParam(name: 'EJECUTAR_UFT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
 	}
 
 	agent any
@@ -91,6 +81,7 @@ pipeline {
 
 				script {
 
+// TODO Cambiar el scope a solo cambios
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName_dm: "${naturalProyecto}",
 						selectedMode: 'DELIVERY_MODE',
@@ -108,15 +99,16 @@ pipeline {
 			}
 		}
 
-		stage('Deploy en Desarrollo') {
+		stage('Despliegue en IC') {
 			when {
-				expression { params.EJECUTAR_DEPLOY }
+				expression { params.EJECUTAR_DEPLOYIC }
 			}
 			steps {
-				echo "Iniciando Deploy en Desarrollo"
+				echo "Iniciando Despliegue en IC"
 
 				// Despliega el código en el servidor de Natural.
 				script {
+// TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
@@ -128,47 +120,27 @@ pipeline {
 					}
 				}
 
-				echo "Finalizando Deploy en Desarrollo"
-			}
-		}
-
-		stage('Entregar a Promoción Natural') {
-			when {
-				expression { params.EJECUTAR_ENTREGA }
-			}
-			steps {
-				echo "Iniciando Entregar a Promoción Natural"
-
 				// Ejecuta el servicio de entrega de Release.
 				script {
+					echo "Se ejecuta la Entrega de Release a Promoción Natural"
 					entregarRelease aplicacion: "${codigoAplicacion}",
-						version: "${version}",
+						version: "${release}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
 						estadoRetorno: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'true'
 
-					def promNatOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
+					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
 
-					PromNatRetorno = promNatOutput.codRetorno
+					entregaRetorno = entregaOutput.codRetorno
 				}
 
-				echo "Finalizando Entregar a Promoción Natural con resultado ${PromNatRetorno}"
-			}
-		}
-
-		stage('Instalar en Integración Continua') {
-			when {
-				expression { params.EJECUTAR_INSTALACION }
-			}
-			steps {
-				echo "Iniciando Instalar en Integración Continua"
-
-				// Ejecuta el servicio de instalación en un entorno.
+				// Ejecuta la instalación de la release en el entorno de IC
 				script {
+					echo "Se ejecuta la instalación de la release en el entorno de IC"
 					desplegarRelease aplicacion: "${codigoAplicacion}",
-						version: "${version}",
+						version: "${release}",
 						entornoDestino: 'IC',
 						estadoRetorno: 'Failure'
 
@@ -177,7 +149,7 @@ pipeline {
 					instalarRetorno = instalarOutput.codRetorno
 				}
 
-				echo "Finalizando Instalar en Integración Continua con resultado ${instalarRetorno}"
+				echo "Finalizando Despliegue en IC"
 			}
 		}
 
@@ -189,6 +161,7 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
+// TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
@@ -201,104 +174,6 @@ pipeline {
 				}
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
-			}
-		}
-
-		stage('Arrancando monitorización Adabas (TPAI)') {
-			when {
-				expression { params.EJECUTAR_TPAI }
-			}
-			steps {
-				echo "Iniciando arranque monitorización Adabas (TPAI)"
-
-				script {
-
-					tpaiIniciaPrueba aplicacion: "${codigoAplicacion}",
-						version: "${version}",
-						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy_',
-						estadoPruebas: 'Failure',
-						selSoloModulosModificados: 'true',
-						selTodosTiposModulos: 'false',
-						selModulosProgram: true,
-						selModulosSubprogram: true,
-						selModulosSubroutine: true,
-						selModulosFunction: true,
-						selModulosClass: true,
-						selModulosCopycode: true,
-						selModulosDataDefinitionModule: false,
-						selModulosDialog: false,
-						selModulosGlobalDataArea: false,
-						selModulosHelproutine: false,
-						selModulosLocalDataArea: false,
-						selModulosMap: false,
-						selModulosParameterDataArea: false,
-						selModulosText: false,
-						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
-									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
-
-					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/iniciarPruebaOutput_${env.BUILD_ID}.json"
-
-					TPAI_Ticket = tpaiOutput.ticketPrueba
-				}
-
-				echo "Finalizando arranque monitorización Adabas (TPAI) con el Ticket ${TPAI_Ticket}"
-			}
-		}
-
-		stage('Pruebas funcionales (ALM - UFT)') {
-			when {
-				expression { params.EJECUTAR_UFT }
-			}
-			steps {
-				echo "Iniciando Pruebas funcionales (ALM - UFT)"
-
-				node ('UFT_AGENT') {
-
-					runFromAlmBuilder almServerName: 'ALMServer',
-						almCredentialsScope: 'JOB',
-						almDomain: "${uftDominio}",
-						almProject: "${uftProyecto}",
-						almUserName: "${uftUsuario}",
-						almPassword: "${uftPassword}",
-						almRunMode: 'RUN_REMOTE',
-						almRunHost: "${uftEjecutor}",
-						almTestSets: "${uftTestSets}",
-						almTimeout: '3000',
-						almClientID: '',
-						almRunResultsMode: '',
-						almApiKey: '',
-						isSSOEnabled: false	
-
-				}
-
-				echo "Finalizando Pruebas funcionales (ALM - UFT)"
-			}
-		}
-
-		stage('Parando monitorización Adabas (TPAI)') {
-			when {
-				expression { params.EJECUTAR_TPAI }
-			}
-			steps {
-				echo "Iniciando parada monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
-
-				tpaiFinalizaPrueba ticketPrueba: "${TPAI_Ticket}",
-					estadoRetorno: 'Unstable'
-
-				echo "Finalizando parada monitorización Adabas (TPAI)"
-			}
-		}
-
-		stage('Obteniendo análisis monitorización Adabas (TPAI)') {
-			when {
-				expression { params.EJECUTAR_TPAI }
-			}
-			steps {
-				echo "Iniciando análisis monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
-
-
-				echo "Finalizando análisis monitorización Adabas (TPAI)"
 			}
 		}
 

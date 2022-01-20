@@ -109,7 +109,7 @@ pipeline {
 				// Despliega el código en el servidor de Natural.
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
-					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
+					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployICv1.1.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"

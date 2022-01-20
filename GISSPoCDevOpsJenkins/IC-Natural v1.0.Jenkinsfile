@@ -4,7 +4,7 @@
 // Variable con la URL de acceso a Git.
 def urlGit = 'https://github.com/RaulDeVicente'
 // Variable con la ubicación de las librerías necesarias para realizar el deploy de Natural.
-def libreriasDeploy = 'C:/workspaces/DevOpsNat/NO4Jenkins/deploy'
+def libreriasDeploy = 'C:/workspaces/DevOpsNat/NO4Jenkins/deploy914'
 // Variable con la ubicación de las librerías necesarias para realizar el Unit Test de Natural.
 def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 
@@ -105,7 +105,7 @@ pipeline {
 				// Despliega el código en el servidor de Natural.
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
-					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
+					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployICv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"

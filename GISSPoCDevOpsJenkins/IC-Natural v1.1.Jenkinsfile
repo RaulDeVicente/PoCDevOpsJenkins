@@ -127,7 +127,7 @@ pipeline {
 						version: "${release}",
 						proceso: 'IC',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy_',
+						patronFichero: 'history_deploy',
 						estadoRetorno: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'true'

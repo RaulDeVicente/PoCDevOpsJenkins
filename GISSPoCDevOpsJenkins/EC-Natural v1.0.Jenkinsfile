@@ -139,7 +139,7 @@ pipeline {
 						version: "${release}",
 						proceso: 'CE',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy_',
+						patronFichero: 'history_deploy',
 						estadoRetorno: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'true'
@@ -202,7 +202,7 @@ pipeline {
 					tpaiIniciaPrueba aplicacion: "${codigoAplicacion}",
 						version: "${release}",
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy_',
+						patronFichero: 'history_deploy',
 						estadoPruebas: 'Failure',
 						selSoloModulosModificados: 'true',
 						selTodosTiposModulos: 'false',

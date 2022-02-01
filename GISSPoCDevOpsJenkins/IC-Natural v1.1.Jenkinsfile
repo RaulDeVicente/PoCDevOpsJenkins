@@ -125,6 +125,7 @@ pipeline {
 					echo "Se ejecuta la Entrega de Release a Promoción Natural"
 					entregarRelease aplicacion: "${codigoAplicacion}",
 						version: "${release}",
+						proceso: 'IC',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy_',
 						estadoRetorno: 'Failure',

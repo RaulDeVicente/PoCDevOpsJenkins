@@ -21,6 +21,8 @@ def release = "IC.${env.BUILD_ID}"
 def KiuwanScore
 // Variable con el Código de Resultado de la Entrega a la Promoción Natural.
 def entregaRetorno
+// Variable con el número de módulos Entregados a la Promoción Natural.
+def entregaModulosProcesados
 // Variable con el Código de Resultado de la Instalación en IC.
 def instalarRetorno
 
@@ -127,14 +129,21 @@ pipeline {
 						version: "${release}",
 						proceso: 'IC',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy',
-						estadoRetorno: 'Failure',
-						selSoloModulosModificados: 'true',
-						selTodosTiposModulos: 'true'
+						estadoRetorno: 'Failure'
 
 					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
 
-					entregaRetorno = entregaOutput.codRetorno
+					entregaRetorno = entregaOutput.respuesta
+					entregaModulosProcesados = entregaOutput.modulosProcesados
+
+					echo "Se ha ejecutado la Entrega de Release a Promoción Natural con respuesta: ${entregaRetorno} y un número de módulos entregados: ${entregaModulosProcesados}"
+
+//{
+//"respuestaServicio":{"descRetorno":"Respuesta.",
+//"codRetorno":"0"},
+//"modulosProcesados":16,
+//"respuesta":"0"
+//}
 				}
 
 				// Ejecuta la instalación de la release en el entorno de IC
@@ -147,7 +156,9 @@ pipeline {
 
 					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
 
-					instalarRetorno = instalarOutput.codRetorno
+					instalarRetorno = instalarOutput.respuesta
+
+					echo "Se ha ejecutado la instalación de la release en el entorno de IC con respuesta: ${instalarRetorno}"
 				}
 
 				echo "Finalizando Despliegue en IC"

@@ -29,8 +29,12 @@ def KiuwanScore
 def TPAI_Ticket
 // Variable con el Código de Resultado de la Entrega a la Promoción Natural.
 def entregaRetorno
+// Variable con el número de módulos Entregados a la Promoción Natural.
+def entregaModulosProcesados
 // Variable con el Código de Resultado de la Instalación en CE.
 def instalarRetorno
+// Variable con el Código de Resultado del inicio de las pruebas con TPAI.
+def TPAI_respuesta
 
 
 pipeline {
@@ -146,7 +150,17 @@ pipeline {
 
 					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
 
-					entregaRetorno = entregaOutput.codRetorno
+					entregaRetorno = entregaOutput.respuesta
+					entregaModulosProcesados = entregaOutput.modulosProcesados
+
+					echo "Se ha ejecutado la Entrega de Release a Promoción Natural con respuesta: ${entregaRetorno} y un número de módulos entregados: ${entregaModulosProcesados}"
+
+//{
+//"respuestaServicio":{"descRetorno":"Respuesta.",
+//"codRetorno":"0"},
+//"modulosProcesados":16,
+//"respuesta":"0"
+//}
 				}
 
 				// Ejecuta la instalación de la release en el entorno de CE
@@ -159,7 +173,9 @@ pipeline {
 
 					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
 
-					instalarRetorno = instalarOutput.codRetorno
+					instalarRetorno = instalarOutput.respuesta
+
+					echo "Se ha ejecutado la instalación de la release en el entorno de CE con respuesta: ${instalarRetorno}"
 				}
 
 				echo "Finalizando Despliegue en CE"
@@ -201,31 +217,14 @@ pipeline {
 
 					tpaiIniciaPrueba aplicacion: "${codigoAplicacion}",
 						version: "${release}",
-						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy',
 						estadoPruebas: 'Failure',
-						selSoloModulosModificados: 'true',
-						selTodosTiposModulos: 'false',
-						selModulosProgram: true,
-						selModulosSubprogram: true,
-						selModulosSubroutine: true,
-						selModulosFunction: true,
-						selModulosClass: true,
-						selModulosCopycode: true,
-						selModulosDataDefinitionModule: false,
-						selModulosDialog: false,
-						selModulosGlobalDataArea: false,
-						selModulosHelproutine: false,
-						selModulosLocalDataArea: false,
-						selModulosMap: false,
-						selModulosParameterDataArea: false,
-						selModulosText: false,
 						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
 									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
 
 					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/iniciarPruebaOutput_${env.BUILD_ID}.json"
 
 					TPAI_Ticket = tpaiOutput.ticketPrueba
+					TPAI_respuesta = tpaiOutput.ticketPrueba
 				}
 
 				echo "Finalizando arranque monitorización Adabas (TPAI) con el Ticket ${TPAI_Ticket}"

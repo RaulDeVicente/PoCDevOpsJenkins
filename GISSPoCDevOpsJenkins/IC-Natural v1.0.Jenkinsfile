@@ -104,7 +104,7 @@ pipeline {
 				// Despliega el código en el servidor de Natural.
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
-					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployICv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
+					def Parametros = "-buildfile ${naturalProyecto}/${naturalProyecto}/deployICv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -128,7 +128,7 @@ pipeline {
 
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de ejecución de las Unit Test..
-					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
+					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
 					withAnt(installation: 'Ant Local', jdk: 'Java') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -138,6 +138,7 @@ pipeline {
 						}
 					}
 				}
+//				junit 'logUnitTest.xml'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

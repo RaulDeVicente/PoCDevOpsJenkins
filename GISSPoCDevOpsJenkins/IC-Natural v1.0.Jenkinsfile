@@ -53,7 +53,7 @@ pipeline {
 				// Obtiene el código del GitHub repository con el Ant de NaturalOne
 //				script {
 //					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} update && exit %%ERRORLEVEL%%"
-//					withAnt(installation: 'Ant Local', jdk: 'Java') {
+//					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 //						if (isUnix()) {
 //							sh "ant ${Parametros}"
 //						}
@@ -105,7 +105,7 @@ pipeline {
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					def Parametros = "-buildfile ${naturalProyecto}/${naturalProyecto}/deployICv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
-					withAnt(installation: 'Ant Local', jdk: 'Java') {
+					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
 						}
@@ -129,7 +129,7 @@ pipeline {
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de ejecución de las Unit Test..
 					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
-					withAnt(installation: 'Ant Local', jdk: 'Java') {
+					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
 						}

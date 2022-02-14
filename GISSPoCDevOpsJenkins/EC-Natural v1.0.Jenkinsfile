@@ -271,7 +271,9 @@ pipeline {
 				echo "Iniciando parada monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
 
 				tpaiFinalizaPrueba ticketPrueba: "${TPAI_Ticket}",
-					estadoRetorno: 'Unstable'
+					estadoRetorno: 'Unstable',
+					intervaloPooling: 60,
+					timeoutPooling: 3600
 
 				echo "Finalizando parada monitorización Adabas (TPAI)"
 			}

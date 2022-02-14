@@ -30,9 +30,9 @@ pipeline {
 
 	agent any
 
-//	tools {
-//	   jdk "Java"
-//	}
+	tools {
+	   jdk "Java11"
+	}
 
 	stages {
 

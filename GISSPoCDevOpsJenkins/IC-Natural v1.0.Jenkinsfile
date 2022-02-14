@@ -136,7 +136,7 @@ pipeline {
 						}
 					}
 				}
-//				echo "${env.WORKSPACE}/logUnitTest.xml"
+
 				junit 'logUnitTest.xml'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"

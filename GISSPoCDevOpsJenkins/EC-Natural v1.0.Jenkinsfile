@@ -50,7 +50,7 @@ pipeline {
 	agent any
 
 	tools {
-	   jdk "Java"
+	   jdk "Java11"
 	}
 
 	stages {
@@ -73,7 +73,7 @@ pipeline {
 				// Obtiene el código del GitHub repository con el Ant de NaturalOne
 //				script {
 //					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deploy.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} update && exit %%ERRORLEVEL%%"
-//					withAnt(installation: 'Ant Local', jdk: 'Java') {
+//					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 //						if (isUnix()) {
 //							sh "ant ${Parametros}"
 //						}
@@ -126,7 +126,7 @@ pipeline {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					echo "Se ejecuta el Deploy de Natural en las librerías de entrega"
 					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployECv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
-					withAnt(installation: 'Ant Local', jdk: 'Java') {
+					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
 						}
@@ -169,7 +169,9 @@ pipeline {
 					desplegarRelease aplicacion: "${codigoAplicacion}",
 						version: "${release}",
 						entornoDestino: 'CE',
-						estadoRetorno: 'Failure'
+						estadoRetorno: 'Failure',
+						intervaloPooling: 60,
+						timeoutPooling: 3600
 
 					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
 
@@ -192,7 +194,7 @@ pipeline {
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
-					withAnt(installation: 'Ant Local', jdk: 'Java') {
+					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
 						}

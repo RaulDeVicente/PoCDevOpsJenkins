@@ -144,9 +144,7 @@ pipeline {
 						proceso: 'CE',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						patronFichero: 'history_deploy',
-						estadoRetorno: 'Failure',
-						selSoloModulosModificados: 'true',
-						selTodosTiposModulos: 'true'
+						estadoRetorno: 'Failure'
 
 					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
 

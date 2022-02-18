@@ -153,8 +153,8 @@ pipeline {
 						version: "${release}",
 						entornoDestino: 'IC',
 						estadoRetorno: 'Failure',
-						intervaloPooling: 60,
-						timeoutPooling: 3600
+						intervaloPooling: "60",
+						timeoutPooling: "3600"
 
 					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
 

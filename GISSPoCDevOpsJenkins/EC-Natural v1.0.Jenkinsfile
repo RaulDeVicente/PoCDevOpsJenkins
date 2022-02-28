@@ -124,7 +124,6 @@ pipeline {
 				// Despliega el código en el servidor de Natural.
 				script {
 // TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
-					echo "Se ejecuta el Deploy de Natural en las librerías de entrega"
 					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployECv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
@@ -143,7 +142,6 @@ pipeline {
 						version: "${release}",
 						proceso: 'CE',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-						patronFichero: 'history_deploy',
 						estadoRetorno: 'Failure'
 
 					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
@@ -168,8 +166,8 @@ pipeline {
 						version: "${release}",
 						entornoDestino: 'CE',
 						estadoRetorno: 'Failure',
-						intervaloPooling: 60,
-						timeoutPooling: 3600
+						intervaloPooling: "60",
+						timeoutPooling: "3600"
 
 					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
 
@@ -201,6 +199,8 @@ pipeline {
 						}
 					}
 				}
+
+				junit 'logUnitTest.xml'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}
@@ -270,8 +270,8 @@ pipeline {
 
 				tpaiFinalizaPrueba ticketPrueba: "${TPAI_Ticket}",
 					estadoRetorno: 'Unstable',
-					intervaloPooling: 60,
-					timeoutPooling: 3600
+					intervaloPooling: "60",
+					timeoutPooling: "3600"
 
 				echo "Finalizando parada monitorización Adabas (TPAI)"
 			}

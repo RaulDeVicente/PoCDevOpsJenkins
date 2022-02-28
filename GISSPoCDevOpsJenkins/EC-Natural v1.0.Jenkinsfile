@@ -223,11 +223,11 @@ pipeline {
 
 					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/iniciarPruebaOutput_${env.BUILD_ID}.json"
 
-					TPAI_Ticket = tpaiOutput.ticketPrueba
-					TPAI_respuesta = tpaiOutput.ticketPrueba
+					TPAI_Ticket = tpaiOutput.respuestaServicio.ticketPrueba
+					TPAI_respuesta = tpaiOutput.respuesta
 				}
 
-				echo "Finalizando arranque monitorización Adabas (TPAI) con el Ticket ${TPAI_Ticket}"
+				echo "Finalizando arranque monitorización Adabas (TPAI) con respuesta ${TPAI_respuesta} y con Ticket ${TPAI_Ticket}"
 			}
 		}
 
@@ -273,7 +273,7 @@ pipeline {
 					intervaloPooling: "60",
 					timeoutPooling: "3600"
 
-				echo "Finalizando parada monitorización Adabas (TPAI)"
+				echo "Finalizando parada monitorización Adabas (TPAI) para el Ticket ${TPAI_Ticket}"
 			}
 		}
 

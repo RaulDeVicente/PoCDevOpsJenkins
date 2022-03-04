@@ -17,22 +17,20 @@ pipeline {
 		stage('Construir Git-Maven') {
 		
 		    steps {
+
+    		    echo "Iniciando prueba del servicio de PRPI con Selenium"
 		    
                 checkout([$class: 'GitSCM',
     					branches: [[name: '*/main']],
     					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
-    		    echo "Finalizando CheckOut de Git y build"
 		   
 		        withMaven {
                     bat "mvn -f ${proyecto}/pom.xml clean install"
-                } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
+                }
+
+    		    echo "Finalizada prueba del servicio de PRPI con Selenium"
 		   
-              }
-            //post {
-            //    always {
-            //      step([$class: 'Publisher', reportFilenamePattern: '**/testng-results.xml', showFailedBuilds:'true' ])
-            //    }
-		    //}
+            }
 		}
 	}
 }

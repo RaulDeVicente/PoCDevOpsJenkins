@@ -1,11 +1,11 @@
 // Variable con la URL de acceso a Git.
-def urlGit = 'https://github.com/RaulDeVicente'
+def urlGit = 'https://github.com/Valtycius'
 
 // Variables que definen los datos del proyecto/aplicación
-def gitRepositorio = 'PoCDevOpsSelenium'
+def gitRepositorio = 'PoCDevOpsSeleniumJUnit'
 
 // Variable que define el nombre del proyecto
-def proyecto ="GISSPocDevOpsTestSelenium"
+def proyecto ="GISSPocDevOpsTestSeleniumJUnit"
 
 //Variable de sistema 'webdriver.chrome.driver' con la ruta del .exe encargado de realizar las pruebas
 def webdriverChrome= "C:\\chromedriver.exe"
@@ -32,18 +32,17 @@ pipeline {
     		    echo "Iniciando prueba del servicio de PRPI con Selenium"
 		    
                 checkout([$class: 'GitSCM',
-    					branches: [[name: '*/main']],
+    					branches: [[name: '*/master']],
     					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
 		   
 		        withMaven {
-		         //Ejecución con ChromeDriver   
-                 bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-                 //bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-    
-		        }
+		          //Ejecución con ChromeDriver   
+                  //bat "mvn -e clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+                  bat "mvn -e clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+                }
 
     		    echo "Finalizada prueba del servicio de PRPI con Selenium"
-		   
+    		    
             }
 		}
 	}

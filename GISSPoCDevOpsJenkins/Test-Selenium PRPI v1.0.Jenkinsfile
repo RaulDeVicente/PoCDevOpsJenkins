@@ -14,7 +14,7 @@ def webdriverChrome= "C:\\chromedriver.exe"
 def webdriverMSEdge= "C:\\edgedriver_win64\\msedgedriver.exe"
 
 //Variable que define el host en el que se realizarán las pruebas
-def host= "10.199.52.96"
+def host= "10.199.52.100"
 
 //Variable que define el puerto en el que se realizarán las pruebas
 def port= "9080"

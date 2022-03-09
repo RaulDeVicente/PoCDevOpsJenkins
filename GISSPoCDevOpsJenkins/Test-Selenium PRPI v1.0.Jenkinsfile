@@ -14,7 +14,7 @@ def webdriverChrome= "C:\\chromedriver.exe"
 def webdriverMSEdge= "C:\\edgedriver_win64\\msedgedriver.exe"
 
 //Variable que define el host en el que se realizarán las pruebas
-def host= "10.199.52.100"
+def host= "10.199.52.106"
 
 //Variable que define el puerto en el que se realizarán las pruebas
 def port= "9080"
@@ -37,8 +37,8 @@ pipeline {
 		   
 		        withMaven {
 		         //Ejecución con ChromeDriver   
-                 bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-                 //bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+//                 bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+                	bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
     
 		        }
 

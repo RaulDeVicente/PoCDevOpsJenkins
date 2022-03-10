@@ -128,7 +128,7 @@ pipeline {
 					almTestSetFolder: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
 					clientType: '',
 					createNewTest: false,
-//					credentialsId: '31109fa4-8021-4afa-b50d-fedead21e478',
+					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
 						  root: "x:/result/suites/suite"
 						  name: "x:name"

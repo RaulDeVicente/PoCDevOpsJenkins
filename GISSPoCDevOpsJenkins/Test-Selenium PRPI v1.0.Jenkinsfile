@@ -37,8 +37,8 @@ pipeline {
 		   
 		        withMaven {
 		         //Ejecución con ChromeDriver   
-//                 bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-                	bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+                 bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+//                	bat "mvn -e -f ${proyecto}/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
     
 		        }
 

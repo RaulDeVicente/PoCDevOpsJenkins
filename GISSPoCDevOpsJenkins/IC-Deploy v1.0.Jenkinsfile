@@ -117,8 +117,10 @@ pipeline {
 					}
 				}
 
+				echo "Ejecutando plugin de JUnit"
 				junit 'logUnitTest.xml'
 
+				echo "Publicando resultado en ALM"
 				commonResultUploadBuilder almDomain: 'CCD',
 					almProject: 'DEVOPS_PC',
 					almServerName: 'ALMServer',
@@ -126,7 +128,7 @@ pipeline {
 					almTestSetFolder: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
 					clientType: '',
 					createNewTest: false,
-					credentialsId: '31109fa4-8021-4afa-b50d-fedead21e478',
+//					credentialsId: '31109fa4-8021-4afa-b50d-fedead21e478',
 					fieldMapping: '''testset:
 						  root: "x:/result/suites/suite"
 						  name: "x:name"

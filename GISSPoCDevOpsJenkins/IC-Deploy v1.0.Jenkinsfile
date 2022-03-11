@@ -12,6 +12,7 @@ def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
+def release = "IC.${env.BUILD_ID}"
 
 pipeline {
 	parameters {

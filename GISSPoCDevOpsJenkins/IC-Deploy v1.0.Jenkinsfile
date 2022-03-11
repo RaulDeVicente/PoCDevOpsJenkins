@@ -58,7 +58,7 @@ pipeline {
 				script {
 
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
-						applicationName_dm: "${naturalProyecto}",
+						applicationName_dm: "${codigoAplicacion}",
 						label_dm: "#${release}",
 						selectedMode: 'DELIVERY_MODE',
 						analysisScope_dm: 'PARTIAL_DELIVERY',

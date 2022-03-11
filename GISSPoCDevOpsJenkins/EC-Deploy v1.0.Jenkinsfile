@@ -73,7 +73,7 @@ pipeline {
 // TODO Cambiar el modo a Baseline
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName: "${codigoAplicacion}",
-						label: "#${release}",
+						label: "${release}",
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
 						indicateLanguages: true,
 						languages: 'natural',

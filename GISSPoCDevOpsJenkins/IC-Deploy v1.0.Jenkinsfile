@@ -59,7 +59,7 @@ pipeline {
 
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName_dm: "${codigoAplicacion}",
-						label_dm: "#${release}",
+						label_dm: "${release}",
 						selectedMode: 'DELIVERY_MODE',
 						analysisScope_dm: 'PARTIAL_DELIVERY',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",

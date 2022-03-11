@@ -81,11 +81,12 @@ pipeline {
 						failureThreshold: 10.0,
 						unstableThreshold: 20.0
 
-					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
-					KiuwanScore = kiuwanOutput.auditResult.score
+//					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
+//					KiuwanScore = kiuwanOutput.auditResult.score
 				}
 
-				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
+//				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
+				echo "Finalizando Análisis de código (Kiuwan)"
 			}
 		}
 

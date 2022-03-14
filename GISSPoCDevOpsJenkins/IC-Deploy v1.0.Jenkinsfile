@@ -122,6 +122,7 @@ pipeline {
 				script {
 					if (fileExists('logUnitTest.xml')) {
 						echo 'Existe el fichero logUnitTest.xml'
+						sh "cp logUnitTest.xml C:/workspaces/DevOpsNat/Jenkins/.jenkins/jobs/DevOps Natural/jobs/${JOB_NAME}/builds/$BUILD_ID"
 					} else {
 						echo 'No existe el fichero logUnitTest.xml'
 					}
@@ -132,6 +133,8 @@ pipeline {
 					testResults: 'logUnitTest.xml',
 					healthScaleFactor: 1.0,
 					keepLongStdio: true
+
+cp path_of_testng_resuls/testng_results.xml .jenkins/jobs/${JOB_NAME}/builds/$BUILD_ID
 
 				echo "Publicando resultado en ALM"
 				uploadResultToALM almServerName: 'ALMServer',

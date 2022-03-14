@@ -134,7 +134,6 @@ pipeline {
 					healthScaleFactor: 1.0,
 					keepLongStdio: true
 
-cp path_of_testng_resuls/testng_results.xml .jenkins/jobs/${JOB_NAME}/builds/$BUILD_ID
 
 				echo "Publicando resultado en ALM"
 				uploadResultToALM almServerName: 'ALMServer',

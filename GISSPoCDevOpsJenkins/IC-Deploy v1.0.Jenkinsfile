@@ -129,7 +129,7 @@ pipeline {
 					almDomain: 'CCD',
 					almProject: 'DEVOPS_PC',
 					clientType: '',
-					almTimeout: 600,
+					almTimeout: '600',
 					jenkinsServerUrl: 'http://ntx52desa314.seg-social.ss:8080',
 					almTestFolder: 'Prueba\\Test',
 					almTestSetFolder: 'Prueba\\TestSet',

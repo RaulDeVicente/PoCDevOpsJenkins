@@ -118,10 +118,13 @@ pipeline {
 						}
 					}
 				}
-				if (fileExists('logUnitTest.xml')) {
-					echo 'Existe el fichero logUnitTest.xml'
-				} else {
-					echo 'No existe el fichero logUnitTest.xml'
+
+				script {
+					if (fileExists('logUnitTest.xml')) {
+						echo 'Existe el fichero logUnitTest.xml'
+					} else {
+						echo 'No existe el fichero logUnitTest.xml'
+					}
 				}
 
 				echo "Ejecutando plugin de JUnit"

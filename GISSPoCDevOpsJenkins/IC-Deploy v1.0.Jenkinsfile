@@ -118,12 +118,16 @@ pipeline {
 						}
 					}
 				}
+				if (fileExists('logUnitTest.xml')) {
+					echo 'Existe el fichero logUnitTest.xml'
+				} else {
+					echo 'No existe el fichero logUnitTest.xml'
+				}
 
 				echo "Ejecutando plugin de JUnit"
 				junit 'logUnitTest.xml'
 
 				echo "Publicando resultado en ALM"
-
 				uploadResultToALM almServerName: 'ALMServer',
 					credentialsId: 'AlmUser',
 					almDomain: 'CCD',

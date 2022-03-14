@@ -120,7 +120,7 @@ pipeline {
 				}
 
 				script {
-					if (fileExists('logUnitTest2.xml')) {
+					if (fileExists('logUnitTest.xml')) {
 						echo 'Existe el fichero logUnitTest.xml'
 						bat "copy ${env.WORKSPACE}\\logUnitTest.xml C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\jobs\\DevOps Natural\\jobs\\IC Deploy v1.0 NTDO\\builds\\$BUILD_ID"
 					} else {

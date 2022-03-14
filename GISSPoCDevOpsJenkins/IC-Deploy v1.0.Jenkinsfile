@@ -125,7 +125,10 @@ pipeline {
 				}
 
 				echo "Ejecutando plugin de JUnit"
-				junit 'logUnitTest.xml'
+				junit allowEmptyResults: true,
+					testResults: 'logUnitTest.xml',
+					healthScaleFactor: 1.0,
+					keepLongStdio: true
 
 				echo "Publicando resultado en ALM"
 				uploadResultToALM almServerName: 'ALMServer',

@@ -128,8 +128,11 @@ pipeline {
 					credentialsId: 'AlmUser',
 					almDomain: 'CCD',
 					almProject: 'DEVOPS_PC',
-					almTestFolder: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
-					almTestSetFolder: '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA''',
+					clientType: '',
+					almTimeout: 600,
+					jenkinsServerUrl: 'http://ntx52desa314.seg-social.ss:8080',
+					almTestFolder: 'Prueba\\Test',
+					almTestSetFolder: 'Prueba\\TestSet',
 					testingFramework: 'JUnit',
 					testingResultFile: '**/logUnitTest.xml',
 					testingTool: 'Natural Unit test'

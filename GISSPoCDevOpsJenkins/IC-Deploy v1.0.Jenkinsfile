@@ -144,7 +144,7 @@ pipeline {
 					almTestFolder: 'Prueba\\Test',
 					almTestSetFolder: 'Prueba\\TestSet',
 					testingFramework: 'JUnit',
-					testingResultFile: 'logUnitTest.xml',
+					testingResultFile: '**/junitResult.xml',
 					testingTool: 'Natural Unit test'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"

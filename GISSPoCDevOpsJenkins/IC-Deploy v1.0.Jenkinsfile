@@ -147,7 +147,7 @@ cp path_of_testng_resuls/testng_results.xml .jenkins/jobs/${JOB_NAME}/builds/$BU
 					almTestFolder: 'Prueba\\Test',
 					almTestSetFolder: 'Prueba\\TestSet',
 					testingFramework: 'JUnit',
-					testingResultFile: '**/junitResult.xml',
+					testingResultFile: '**/logUnitTest.xml',
 					testingTool: 'Natural Unit test'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"

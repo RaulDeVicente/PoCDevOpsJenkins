@@ -136,6 +136,9 @@ pipeline {
 
 
 				echo "Publicando resultado en ALM"
+
+				node ('NodoJava8') {
+
 				uploadResultToALM almServerName: 'ALMServer',
 					credentialsId: 'AlmUser',
 					almDomain: 'CCD',
@@ -148,6 +151,8 @@ pipeline {
 					testingFramework: 'JUnit',
 					testingResultFile: '**/logUnitTest.xml',
 					testingTool: 'Natural Unit test'
+
+				}
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

@@ -122,7 +122,7 @@ pipeline {
 				script {
 					if (fileExists('logUnitTest.xml')) {
 						echo 'Existe el fichero logUnitTest.xml'
-						bat "copy \"${env.WORKSPACE}\\logUnitTest.xml\" \"C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\PruebaALM\""
+//						bat "copy \"${env.WORKSPACE}\\logUnitTest.xml\" \"C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\PruebaALM\""
 					} else {
 						echo 'No existe el fichero logUnitTest.xml'
 					}

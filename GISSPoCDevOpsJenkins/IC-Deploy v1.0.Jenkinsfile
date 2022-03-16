@@ -122,7 +122,7 @@ pipeline {
 				script {
 					if (fileExists('logUnitTest.xml')) {
 						echo 'Existe el fichero logUnitTest.xml'
-						bat "copy \"${env.WORKSPACE}\\logUnitTest.xml\" \"C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\jobs\\DevOps Natural\\jobs\\IC Deploy v1.0 NTDO\\builds\\$BUILD_ID\""
+//						bat "copy \"${env.WORKSPACE}\\logUnitTest.xml\" \"C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\jobs\\DevOps Natural\\jobs\\IC Deploy v1.0 NTDO\\builds\\$BUILD_ID\""
 					} else {
 						echo 'No existe el fichero logUnitTest.xml'
 					}
@@ -137,7 +137,7 @@ pipeline {
 
 				echo "Publicando resultado en ALM"
 
-				node ('NodoJava8') {
+//				node ('NodoJava8') {
 
 				uploadResultToALM almServerName: 'ALMServer',
 					credentialsId: 'AlmUser',
@@ -145,14 +145,15 @@ pipeline {
 					almProject: 'DEVOPS_PC',
 					clientType: '',
 					almTimeout: '600',
-					jenkinsServerUrl: 'http://ntx52desa314.seg-social.ss:8080',
-					almTestFolder: 'Prueba\\Test',
-					almTestSetFolder: 'Prueba\\TestSet',
+					jenkinsServerUrl: 'http://ntx52desa299.seg-social.ss:8080',
+					almTestFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
+					almTestSetFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
 					testingFramework: 'JUnit',
-					testingResultFile: '**/logUnitTest.xml',
+					testingResultFile: '**/junitResult.xml',
 					testingTool: 'Natural Unit test'
-
-				}
+//junitResult.xml
+//logUnitTest.xml
+//				}
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

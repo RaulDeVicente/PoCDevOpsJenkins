@@ -70,16 +70,15 @@ pipeline {
 
 				script {
 
-// TODO Cambiar el modo a Baseline
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
-						applicationName: "${codigoAplicacion}",
-						label: "${release}",
+						applicationName_dm: "${codigoAplicacion}",
+						label_dm: "${release}",
+						selectedMode: 'DELIVERY_MODE',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
-						indicateLanguages: true,
-						languages: 'natural',
-						timeout: 30,
-						failureThreshold: 10.0,
-						unstableThreshold: 20.0
+						indicateLanguages_dm: true,
+						languages_dm: 'natural',
+						timeout_dm: 30,
+						waitForAuditResults_dm: true
 
 //					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
 //					KiuwanScore = kiuwanOutput.auditResult.score

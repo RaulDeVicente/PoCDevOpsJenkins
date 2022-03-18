@@ -26,7 +26,7 @@ pipeline {
 
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						selectedMode: 'EXPERT_MODE',
-						commandArgs_em: "--promote-to-baseline -n ${codigoAplicacion} -cr CR-9999 -l ${DELIVERY_LABEL} -pbl ${BASELINE_LABEL}"
+						commandArgs_em: '--promote-to-baseline -n "${codigoAplicacion}" -cr CR-9999 -l "${DELIVERY_LABEL}" -pbl "${BASELINE_LABEL}"'
 
 				}
 

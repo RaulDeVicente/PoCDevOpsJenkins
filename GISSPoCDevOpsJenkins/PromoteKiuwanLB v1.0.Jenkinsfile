@@ -3,8 +3,6 @@
 // Constantes, estas variables deberán estar definidas como variables de entorno de Jenkins:
 // Variables que definen los datos del proyecto/aplicación
 def codigoAplicacion = 'NTDO'
-def naturalProyecto = 'GISSPoCNatDevOps'
-def release = "IC.${env.BUILD_ID}"
 
 pipeline {
 	parameters {
@@ -22,7 +20,7 @@ pipeline {
 
 		stage('Promocionar a Línea Base en Kiuwan') {
 			steps {
-				echo "Iniciando promoción a Línea Base en Kiuwan de la release ${DELIVERY_LABEL} a ${BASELINE_LABEL}"
+				echo "Iniciando promoción a Línea Base en Kiuwan de la app. ${codigoAplicacion} y release ${DELIVERY_LABEL} a ${BASELINE_LABEL}"
 
 				script {
 
@@ -32,7 +30,7 @@ pipeline {
 
 				}
 
-				echo "Finalizando promoción a Línea Base en Kiuwan de la release ${DELIVERY_LABEL} a ${BASELINE_LABEL}"
+				echo "Finalizando promoción a Línea Base en Kiuwan de la app. ${codigoAplicacion} y release ${DELIVERY_LABEL} a ${BASELINE_LABEL}"
 			}
 		}
 

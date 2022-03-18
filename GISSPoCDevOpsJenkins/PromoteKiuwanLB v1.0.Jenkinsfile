@@ -6,8 +6,8 @@ def codigoAplicacion = 'NTDO'
 
 pipeline {
 	parameters {
-		string(name: 'DELIVERY_LABEL', description: 'Etiqueta de la release que debe promocionarse a Línea Base.')
-		string(name: 'BASELINE_LABEL', description: 'Etiqueta de la Línea Base.')
+		string(name: 'DELIVERY_LABEL', defaultValue: 'PruebaFerCompleta', description: 'Etiqueta de la release que debe promocionarse a Línea Base.')
+		string(name: 'BASELINE_LABEL', defaultValue: 'PruebaLB-Raul', description: 'Etiqueta de la Línea Base.')
 	}
 
 	agent any

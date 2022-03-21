@@ -68,11 +68,12 @@ pipeline {
 						languages_dm: 'natural',
 						timeout_dm: 30
 
-					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
-					KiuwanScore = kiuwanOutput.auditResult.score
+//					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
+//					KiuwanScore = kiuwanOutput.auditResult.score
 				}
 
-				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
+//				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
+				echo "Finalizando Análisis de código (Kiuwan)"
 			}
 		}
 

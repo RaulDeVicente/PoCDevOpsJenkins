@@ -74,11 +74,12 @@ pipeline {
 						applicationName_dm: "${codigoAplicacion}",
 						label_dm: "${release}",
 						selectedMode: 'DELIVERY_MODE',
+						analysisScope_dm: 'PARTIAL_DELIVERY',
+						changeRequestStatus_dm: 'INPROGRESS',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
 						indicateLanguages_dm: true,
 						languages_dm: 'natural',
-						timeout_dm: 30,
-						waitForAuditResults_dm: true
+						timeout_dm: 30
 
 //					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
 //					KiuwanScore = kiuwanOutput.auditResult.score

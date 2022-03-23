@@ -1,4 +1,4 @@
-// Pipeline de la PoC para la instalación en IC de las aplicaciones Natural en su versión 1.0.
+// Pipeline de la PoC para la instalación en IC de las aplicaciones Natural en su versión 1.1.
 
 // Constantes, estas variables deberán estar definidas como variables de entorno de Jenkins:
 // Variable con la URL de acceso a Git.
@@ -8,11 +8,23 @@ def libreriasDeploy = 'C:/workspaces/DevOpsNat/NO4Jenkins/deploy914'
 // Variable con la ubicación de las librerías necesarias para realizar el Unit Test de Natural.
 def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 
+
 // Variables que definen los datos del proyecto/aplicación
 def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
-def release = "IC_1.0_${env.BUILD_ID}"
+def release = "IC_1.1_${env.BUILD_ID}"
+
+// Variables que se calculan en el Pipe.
+// Variable con la puntuación obtenida en Kiuwan.
+def KiuwanScore
+// Variable con el Código de Resultado de la Entrega a la Promoción Natural.
+def entregaRetorno
+// Variable con el número de módulos Entregados a la Promoción Natural.
+def entregaModulosProcesados
+// Variable con el Código de Resultado de la Instalación en CE.
+def instalarRetorno
+
 
 pipeline {
 	parameters {
@@ -37,6 +49,7 @@ pipeline {
 			steps {
 				echo "Iniciando CheckOut de Git"
 
+// TODO Cambiar la rama.
 				// Obtiene el código del GitHub repository con el Plugin de GIT
 				checkout([$class: 'GitSCM',
 					branches: [[name: '*/main']],
@@ -61,12 +74,11 @@ pipeline {
 						applicationName_dm: "${codigoAplicacion}",
 						label_dm: "${release}",
 						selectedMode: 'DELIVERY_MODE',
-						analysisScope_dm: 'PARTIAL_DELIVERY',
-						changeRequestStatus_dm: 'INPROGRESS',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
 						indicateLanguages_dm: true,
 						languages_dm: 'natural',
-						timeout_dm: 30
+						timeout_dm: 30,
+						waitForAuditResults_dm: true
 
 //					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
 //					KiuwanScore = kiuwanOutput.auditResult.score
@@ -77,7 +89,7 @@ pipeline {
 			}
 		}
 
-		stage('Despliegue en IC') {
+		stage('Despliegue en CE') {
 			when {
 				expression { params.EJECUTAR_DEPLOYIC }
 			}
@@ -86,7 +98,8 @@ pipeline {
 
 				// Despliega el código en el servidor de Natural.
 				script {
-					def Parametros = "-buildfile ${naturalProyecto}/${naturalProyecto}/deployICv1.0.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
+// TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
+					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployICv1.1.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -96,6 +109,41 @@ pipeline {
 						}
 					}
 				}
+
+				// Ejecuta el servicio de entrega de Release.
+//				script {
+//					echo "Se ejecuta la Entrega de Release a Promoción Natural"
+//					entregarRelease aplicacion: "${codigoAplicacion}",
+//						version: "${release}",
+//						proceso: 'IC',
+//						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
+//						estadoRetorno: 'Failure'
+//
+//					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
+//
+//					entregaRetorno = entregaOutput.respuesta
+//					entregaModulosProcesados = entregaOutput.modulosProcesados
+//
+//					echo "Se ha ejecutado la Entrega de Release a Promoción Natural con respuesta: ${entregaRetorno} y un número de módulos entregados: ${entregaModulosProcesados}"
+//
+//				}
+
+				// Ejecuta la instalación de la release en el entorno de IC
+//				script {
+//					echo "Se ejecuta la instalación de la release en el entorno de IC"
+//					desplegarRelease aplicacion: "${codigoAplicacion}",
+//						version: "${release}",
+//						entornoDestino: 'IC',
+//						estadoRetorno: 'Failure',
+//						intervaloPooling: "20",
+//						timeoutPooling: "1200"
+//
+//					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
+//
+//					instalarRetorno = instalarOutput.respuesta
+//
+//					echo "Se ha ejecutado la instalación de la release en el entorno de IC con respuesta: ${instalarRetorno}"
+//				}
 
 				echo "Finalizando Despliegue en IC"
 			}
@@ -109,9 +157,9 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
-					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
+					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
-                 		if (isUnix()) {
+						if (isUnix()) {
 							sh "ant ${Parametros}"
 						}
 						else {
@@ -120,26 +168,10 @@ pipeline {
 					}
 				}
 
-				script {
-					if (fileExists('logUnitTest.xml')) {
-						echo 'Existe el fichero logUnitTest.xml'
-//						bat "copy \"${env.WORKSPACE}\\logUnitTest.xml\" \"C:\\workspaces\\DevOpsNat\\Jenkins\\.jenkins\\workspace\\DevOps Natural\\PruebaALM\""
-					} else {
-						echo 'No existe el fichero logUnitTest.xml'
-					}
-				}
-
 				echo "Ejecutando plugin de JUnit"
-				junit allowEmptyResults: true,
-					testResults: 'logUnitTest.xml',
-					healthScaleFactor: 1.0,
-					keepLongStdio: true
-
+				junit 'logUnitTest.xml'
 
 				echo "Publicando resultado en ALM"
-
-//				node ('NodoJava8') {
-
 //				uploadResultToALM almServerName: 'ALMServer',
 //					credentialsId: 'AlmUser',
 //					almDomain: 'CCD',
@@ -152,9 +184,6 @@ pipeline {
 //					testingFramework: 'JUnit',
 //					testingResultFile: '**/junitResult.xml',
 //					testingTool: 'Natural Unit test'
-//junitResult.xml
-//logUnitTest.xml
-//				}
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

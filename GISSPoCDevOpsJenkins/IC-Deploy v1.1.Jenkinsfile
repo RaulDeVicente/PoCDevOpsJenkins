@@ -111,39 +111,39 @@ pipeline {
 				}
 
 				// Ejecuta el servicio de entrega de Release.
-//				script {
-//					echo "Se ejecuta la Entrega de Release a Promoción Natural"
-//					entregarRelease aplicacion: "${codigoAplicacion}",
-//						version: "${release}",
-//						proceso: 'IC',
-//						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
-//						estadoRetorno: 'Failure'
-//
-//					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
-//
-//					entregaRetorno = entregaOutput.respuesta
-//					entregaModulosProcesados = entregaOutput.modulosProcesados
-//
-//					echo "Se ha ejecutado la Entrega de Release a Promoción Natural con respuesta: ${entregaRetorno} y un número de módulos entregados: ${entregaModulosProcesados}"
-//
-//				}
+				script {
+					echo "Se ejecuta la Entrega de Release a Promoción Natural"
+					entregarRelease aplicacion: "${codigoAplicacion}",
+						version: "${release}",
+						proceso: 'IC',
+						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
+						estadoRetorno: 'Failure'
+
+					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
+
+					entregaRetorno = entregaOutput.respuesta
+					entregaModulosProcesados = entregaOutput.modulosProcesados
+
+					echo "Se ha ejecutado la Entrega de Release a Promoción Natural con respuesta: ${entregaRetorno} y un número de módulos entregados: ${entregaModulosProcesados}"
+
+				}
 
 				// Ejecuta la instalación de la release en el entorno de IC
-//				script {
-//					echo "Se ejecuta la instalación de la release en el entorno de IC"
-//					desplegarRelease aplicacion: "${codigoAplicacion}",
-//						version: "${release}",
-//						entornoDestino: 'IC',
-//						estadoRetorno: 'Failure',
-//						intervaloPooling: "20",
-//						timeoutPooling: "1200"
-//
-//					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
-//
-//					instalarRetorno = instalarOutput.respuesta
-//
-//					echo "Se ha ejecutado la instalación de la release en el entorno de IC con respuesta: ${instalarRetorno}"
-//				}
+				script {
+					echo "Se ejecuta la instalación de la release en el entorno de IC"
+					desplegarRelease aplicacion: "${codigoAplicacion}",
+						version: "${release}",
+						entornoDestino: 'IC',
+						estadoRetorno: 'Failure',
+						intervaloPooling: "20",
+						timeoutPooling: "1200"
+
+					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
+
+					instalarRetorno = instalarOutput.respuesta
+
+					echo "Se ha ejecutado la instalación de la release en el entorno de IC con respuesta: ${instalarRetorno}"
+				}
 
 				echo "Finalizando Despliegue en IC"
 			}

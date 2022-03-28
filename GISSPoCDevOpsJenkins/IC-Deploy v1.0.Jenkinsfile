@@ -147,9 +147,9 @@ pipeline {
 					createNewTest: false,
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
-						  root: "x:/result/suites/suite"
+						  root: "x:/testsuites"
 						  name: "x:name"
-						  udf|duration: "x:duration"
+						  udf|duration: "x:time"
 						  udf|list: "x:list"
 						  subtype-id: "v:hp.qc.test-set.default"
 						  #subtype-id: "v:hp.qc.test-set.default"

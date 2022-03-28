@@ -138,6 +138,53 @@ pipeline {
 
 				echo "Publicando resultado en ALM"
 
+				commonResultUploadBuilder almDomain: 'CCD',
+					almProject: 'DEVOPS_PC',
+					almServerName: 'ALMServer',
+					almTestFolder: "NTDO\\${release}",
+					almTestSetFolder: "NTDO\\${release}",
+					clientType: '',
+					createNewTest: false,
+					credentialsId: 'AlmUser',
+					fieldMapping: '''testset:
+						  root: "x:/result/suites/suite"
+						  name: "x:name"
+						  udf|duration: "x:duration"
+						  udf|list: "x:list"
+						  subtype-id: "v:hp.qc.test-set.default"
+						  #subtype-id: "v:hp.qc.test-set.default"
+						  #subtype-id: "v:hp.qc.test-set.external"
+						  #subtype-id: "v:hp.sse.test-set.process"
+						test:
+						  root: "x:cases/case"
+						  name: "x:testName|v:_|x:testId" # Use "|" to create a combined value, e.g.: <testName element value>_<testId element value>
+						  subtype-id: "v:MANUAL"
+						  #subtype-id: "v:SERVICE-TEST"
+						  #subtype-id: "v:SYSTEM-TEST"
+						  #subtype-id: "v:VAPI-XP-TEST"
+						  #subtype-id: "v:ALT-SCENARIO"
+						  #subtype-id: "v:BUSINESS-PROCESS"
+						  #subtype-id: "v:FLOW"
+						  #subtype-id: "v:LEANFT-TEST"
+						  #subtype-id: "v:LR-SCENARIO"
+						  #subtype-id: "v:QAINSPECT-TEST"
+						run:
+						  root: "x:." # "." means the same XML object as defined above in \'test\' entity, all elements defined below are searched from the same root element as \'test\' root
+						  #root: "x:/result/suites/suite/cases/case"
+						  duration: "x:duration" # This system field is integer, if you want to save a float number, please create a string format UDF
+						  status: "x:status"
+						  udf|Run On Version: "x:RunOnVersion" # Create an UDF and set its label to "run on version", to trigger the versioning logic
+						  udf|Date: "2020-03-30" # Date type field value should be in format "yyyy-mm-dd"
+						''',
+					runStatusMapping: '''status:
+						  True: "Passed" # If status attribute is "True" in report, the run in ALM will be marked as "Passed"
+						  False: "Failed" # If status attribute is "False" in report, the run in ALM will be marked as "Failed"
+						  1: "Passed" # If status attribute is "1" in report, the run in ALM will be marked as "Passed"
+						  0: "Failed" # If status attribute is "0" in report, the run in ALM will be marked as "Failed"
+						''',
+					testingResultFile: 'logUnitTest.xml'
+
+
 //				node ('NodoJava8') {
 
 //				uploadResultToALM almServerName: 'ALMServer',

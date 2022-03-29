@@ -152,7 +152,7 @@ pipeline {
 						  udf|duration: "x:time"
 						  subtype-id: "v:hp.qc.test-set.default"
 						test:
-						  root: "x:/result/suites/suite/cases/case"
+						  root: "x:cases/case"
 						  name: "x:testName"
 						  subtype-id: "v:MANUAL"
 						run:

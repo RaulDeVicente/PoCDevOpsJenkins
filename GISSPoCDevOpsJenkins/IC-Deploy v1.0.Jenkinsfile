@@ -149,7 +149,6 @@ pipeline {
 					fieldMapping: '''testset:
   root: "x:result/suites/suite"
   name: "x:enclosingBlockNames/string"
-  udf|duration: "x:time"
   subtype-id: "v:hp.qc.test-set.default"
 test:
   root: "x:cases/case"
@@ -161,9 +160,9 @@ run:
   status: "x:failedSince"
 ''',
 					runStatusMapping: '''status:
-						  1: "Passed" # If status attribute is "1" in report, the run in ALM will be marked as "Passed"
-						  0: "Failed" # If status attribute is "0" in report, the run in ALM will be marked as "Failed"
-						''',
+  1: "Passed" # If status attribute is "1" in report, the run in ALM will be marked as "Passed"
+  0: "Failed" # If status attribute is "0" in report, the run in ALM will be marked as "Failed"
+''',
 					testingResultFile: '**/junitResult.xml'
 
 

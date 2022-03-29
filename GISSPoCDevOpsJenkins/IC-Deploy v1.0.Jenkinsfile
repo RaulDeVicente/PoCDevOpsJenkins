@@ -182,7 +182,7 @@ pipeline {
 						  1: "Passed" # If status attribute is "1" in report, the run in ALM will be marked as "Passed"
 						  0: "Failed" # If status attribute is "0" in report, the run in ALM will be marked as "Failed"
 						''',
-					testingResultFile: 'logUnitTest.xml'
+					testingResultFile: 'logUnitTest34.xml'
 
 
 //				node ('NodoJava8') {

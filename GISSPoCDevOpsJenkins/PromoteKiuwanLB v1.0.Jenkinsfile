@@ -3,6 +3,7 @@
 // Constantes, estas variables deberán estar definidas como variables de entorno de Jenkins:
 // Variables que definen los datos del proyecto/aplicación
 def codigoAplicacion = 'NTDO'
+def naturalProyecto = 'GISSPoCNatDevOps'
 
 pipeline {
 	parameters {

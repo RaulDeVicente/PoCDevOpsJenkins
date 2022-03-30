@@ -34,7 +34,7 @@ pipeline {
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						selectedMode: 'EXPERT_MODE',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
-						commandArgs_em: '--promote-to-baseline -n "NTDO" -cr "" -l "${DELIVERY_LABEL}" -pbl "${BASELINE_LABEL}"'
+						commandArgs_em: '--promote-to-baseline -n "${codigoAplicacion}" -cr "" -l "${DELIVERY_LABEL}" -pbl "${BASELINE_LABEL}"'
 
 				}
 

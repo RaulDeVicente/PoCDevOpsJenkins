@@ -24,9 +24,16 @@ pipeline {
 
 				script {
 
+//kiuwan applicationName_dm: 'PIAC', commandArgs_em: '--', connectionProfileUuid: 'GhBG-3FVp', label_dm: '02.00.00.07', selectedMode: 'DELIVERY_MODE', sourcePath: '/apps/kiuwan/fuentes/GA/PIAC', waitForAuditResults_dm: true
+//					kiuwan connectionProfileUuid: 'GhBG-3FVp',
+//						selectedMode: 'EXPERT_MODE',
+//						sourcePath: '/apps/kiuwan/fuentes/GA/PIAC',
+//						commandArgs_em: '--promote-to-baseline -n "PIAC" -cr "" -l "02.00.00.07" -pbl "LB-02.00.00.07"'
+
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						selectedMode: 'EXPERT_MODE',
-						commandArgs_em: '--promote-to-baseline -n "${codigoAplicacion}" -cr CR-9999 -l "${DELIVERY_LABEL}" -pbl "${BASELINE_LABEL}"'
+						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
+						commandArgs_em: '--promote-to-baseline -n "${codigoAplicacion}" -cr "" -l "${DELIVERY_LABEL}" -pbl "${BASELINE_LABEL}"'
 
 				}
 

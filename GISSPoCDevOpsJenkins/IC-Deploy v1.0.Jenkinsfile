@@ -57,11 +57,12 @@ pipeline {
 
 				script {
 
+//						analysisScope_dm: 'PARTIAL_DELIVERY',
+
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName_dm: "${codigoAplicacion}",
 						label_dm: "${release}",
 						selectedMode: 'DELIVERY_MODE',
-						analysisScope_dm: 'PARTIAL_DELIVERY',
 						changeRequestStatus_dm: 'INPROGRESS',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
 						indicateLanguages_dm: true,

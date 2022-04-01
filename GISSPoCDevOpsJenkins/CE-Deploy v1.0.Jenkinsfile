@@ -194,7 +194,7 @@ pipeline {
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
   root: "x:result/suites/suite"
-  name: "x:name"
+  name: "x:name|v:_|${RELEASE}"
   subtype-id: "v:hp.qc.test-set.external"
 test:
   root: "x:cases/case"

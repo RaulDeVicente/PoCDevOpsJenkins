@@ -15,9 +15,14 @@ def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
 def release = "IC_1.1_${env.BUILD_ID}"
 
+// Variables para las pruebas unitarias
+def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
+def unitTest_EX_SRV = 'RPC/NTSILTGA/CALLNAT'
+def unitTest_EX_USR = 'SGU2142'
+def unitTest_EX_PWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
+
+
 // Variables que se calculan en el Pipe.
-// Variable con la puntuación obtenida en Kiuwan.
-def KiuwanScore
 // Variable con el Código de Resultado de la Entrega a la Promoción Natural.
 def entregaRetorno
 // Variable con el número de módulos Entregados a la Promoción Natural.
@@ -82,11 +87,8 @@ pipeline {
 						languages_dm: 'natural',
 						timeout_dm: 30
 
-//					def kiuwanOutput = readJSON file: "${env.WORKSPACE}/kiuwan/output.json"
-//					KiuwanScore = kiuwanOutput.auditResult.score
 				}
 
-//				echo "Finalizando Análisis de código (Kiuwan) con Score: ${KiuwanScore}"
 				echo "Finalizando Análisis de código (Kiuwan)"
 			}
 		}
@@ -100,7 +102,6 @@ pipeline {
 
 				// Despliega el código en el servidor de Natural.
 				script {
-// TODO Ver cómo parametrizar el servidor/fuser de entrega para el Ant de despliegue.
 					def Parametros = "-file ${naturalProyecto}/${naturalProyecto}/deployICv1.1.xml -Dnatural.ant.project.rootdir=../.. -lib ${libreriasDeploy} build && exit %%ERRORLEVEL%%"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
@@ -159,7 +160,7 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
-					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
+					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.. -Dnatural.testing.ant.brokerid=${unitTest_EX_BRK} -Dnatural.testing.ant.srvaddr=${unitTest_EX_SRV} -Dnatural.testing.ant.exxuid=${unitTest_EX_USR} -Dnatural.testing.ant.exxpwd=${unitTest_EX_PWD}"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -173,19 +174,6 @@ pipeline {
 				echo "Ejecutando plugin de JUnit"
 				junit 'logUnitTest.xml'
 
-				echo "Publicando resultado en ALM"
-//				uploadResultToALM almServerName: 'ALMServer',
-//					credentialsId: 'AlmUser',
-//					almDomain: 'CCD',
-//					almProject: 'DEVOPS_PC',
-//					clientType: '',
-//					almTimeout: '600',
-//					jenkinsServerUrl: 'http://ntx52desa299.seg-social.ss:8080',
-//					almTestFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
-//					almTestSetFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
-//					testingFramework: 'JUnit',
-//					testingResultFile: '**/junitResult.xml',
-//					testingTool: 'Natural Unit test'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

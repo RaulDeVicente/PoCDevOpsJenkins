@@ -13,9 +13,10 @@ def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
 def release = "IC_1.0_${env.BUILD_ID}"
+
 // Variables para las pruebas unitarias
 def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
-def unitTest_EX_SRV = 'RPC/NOSILTGA/CALLNAT'
+def unitTest_EX_SRV = 'RPC/NTSILTGA/CALLNAT'
 def unitTest_EX_USR = 'SGU2142'
 def unitTest_EX_PWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
 
@@ -43,6 +44,7 @@ pipeline {
 			steps {
 				echo "Iniciando CheckOut de Git"
 
+// TODO Cambiar la rama.
 				// Obtiene el código del GitHub repository con el Plugin de GIT
 				checkout([$class: 'GitSCM',
 					branches: [[name: '*/main']],

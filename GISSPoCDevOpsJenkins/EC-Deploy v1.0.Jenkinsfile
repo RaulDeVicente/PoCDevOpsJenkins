@@ -15,6 +15,13 @@ def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
 def release = "1.1.1.${env.BUILD_ID}"
 
+// Variables para las pruebas unitarias
+def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
+def unitTest_EX_SRV = 'RPC/NTSILTGA/CALLNAT'
+def unitTest_EX_USR = 'SGU2142'
+def unitTest_EX_PWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
+
+
 // Variables que se calculan en el Pipe.
 // Variable con la puntuación obtenida en Kiuwan.
 def KiuwanScore
@@ -157,7 +164,7 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
-					def Parametros = "-lib ${libreriasUnitTest} -file ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
+					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.. -Dnatural.testing.ant.brokerid=${unitTest_EX_BRK} -Dnatural.testing.ant.srvaddr=${unitTest_EX_SRV} -Dnatural.testing.ant.exxuid=${unitTest_EX_USR} -Dnatural.testing.ant.exxpwd=${unitTest_EX_PWD}"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"

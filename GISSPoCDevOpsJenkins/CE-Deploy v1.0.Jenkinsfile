@@ -1,4 +1,4 @@
-// Pipeline de la PoC para la instalación en EC de las aplicaciones Natural en su versión 1.0.
+// Pipeline de la PoC para la instalación en CE de las aplicaciones Natural en su versión 1.0.
 
 // Constantes, estas variables deberán estar definidas como variables de entorno de Jenkins:
 // Variable con la URL de acceso a Git.
@@ -13,7 +13,6 @@ def libreriasUnitTest = 'C:/workspaces/DevOpsNat/NO4Jenkins/unitTest'
 def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
-def release = "1.1.1.${env.BUILD_ID}"
 
 // Variables para las pruebas unitarias
 def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
@@ -37,6 +36,7 @@ def instalarRetorno
 
 pipeline {
 	parameters {
+		string(name: 'RELEASE', defaultValue: '1.1.1.', description: 'Release asociada.')
 		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
 		booleanParam(name: 'EJECUTAR_DEPLOYCE', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Despliegue en CE.')
@@ -81,7 +81,7 @@ pipeline {
 
 					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
 						applicationName_dm: "${codigoAplicacion}",
-						label_dm: "${release}",
+						label_dm: "${RELEASE}",
 						selectedMode: 'DELIVERY_MODE',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
 						indicateLanguages_dm: true,
@@ -123,7 +123,7 @@ pipeline {
 				script {
 					echo "Se ejecuta la Entrega de Release a Promoción Natural"
 					entregarRelease aplicacion: "${codigoAplicacion}",
-						version: "${release}",
+						version: "${RELEASE}",
 						proceso: 'CE',
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						estadoRetorno: 'Failure'
@@ -141,7 +141,7 @@ pipeline {
 				script {
 					echo "Se ejecuta la instalación de la release en el entorno de CE"
 					desplegarRelease aplicacion: "${codigoAplicacion}",
-						version: "${release}",
+						version: "${RELEASE}",
 						entornoDestino: 'CE',
 						estadoRetorno: 'Failure',
 						intervaloPooling: "20",
@@ -187,10 +187,10 @@ pipeline {
 				commonResultUploadBuilder almDomain: 'CCD',
 					almProject: 'DEVOPS_PC',
 					almServerName: 'ALMServer',
-					almTestFolder: "NTDO\\${release}",
-					almTestSetFolder: "NTDO\\${release}",
+					almTestFolder: "NTDO\\${RELEASE}",
+					almTestSetFolder: "NTDO\\${RELEASE}",
 					clientType: '',
-					createNewTest: false,
+					createNewTest: true,
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
   root: "x:result/suites/suite"

@@ -171,7 +171,38 @@ pipeline {
 				echo "Ejecutando plugin de JUnit"
 				junit 'logUnitTest.xml'
 
+
 				echo "Publicando resultado en ALM"
+// Faltaría ver cómo meter todos los datos del fallo en ALM.
+// También falta ver cómo resilver el caso del estado Failed.
+				commonResultUploadBuilder almDomain: 'CCD',
+					almProject: 'DEVOPS_PC',
+					almServerName: 'ALMServer',
+					almTestFolder: "NTDO\\${release}",
+					almTestSetFolder: "NTDO\\${release}",
+					clientType: '',
+					createNewTest: false,
+					credentialsId: 'AlmUser',
+					fieldMapping: '''testset:
+  root: "x:result/suites/suite"
+  name: "x:enclosingBlockNames/string"
+  subtype-id: "v:hp.qc.test-set.external"
+test:
+  root: "x:cases/case"
+  name: "x:testName"
+  subtype-id: "v:EXTERNAL-TEST"
+run:
+  root: "x:."
+  duration: "x:duration"
+  status: "x:failedSince"
+''',
+					runStatusMapping: '''status:
+  0: "Passed"
+  1: "Failed"
+''',
+					testingResultFile: '**/junitResult.xml'
+
+// Esta forma no funciona con Java 11, solo con Java 8.
 //				uploadResultToALM almServerName: 'ALMServer',
 //					credentialsId: 'AlmUser',
 //					almDomain: 'CCD',

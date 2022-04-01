@@ -13,6 +13,12 @@ def gitRepositorio = 'PoCNatDevOps'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
 def release = "IC_1.0_${env.BUILD_ID}"
+// Variables para las pruebas unitarias
+def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
+def unitTest_EX_SRV = 'RPC/NOSILTGA/CALLNAT'
+def unitTest_EX_USR = 'SGU2142'
+def unitTest_EX_PWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
+
 
 pipeline {
 	parameters {
@@ -110,7 +116,7 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
-					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.."
+					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.. -Dnatural.testing.ant.brokerid=${unitTest_EX_BRK} -Dnatural.testing.ant.srvaddr=${unitTest_EX_SRV} -Dnatural.testing.ant.exxuid=${unitTest_EX_USR} -Dnatural.testing.ant.exxpwd=${unitTest_EX_PWD}"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
                  		if (isUnix()) {
 							sh "ant ${Parametros}"
@@ -135,55 +141,6 @@ pipeline {
 					testResults: 'logUnitTest.xml',
 					healthScaleFactor: 1.0,
 					keepLongStdio: true
-
-
-				echo "Publicando resultado en ALM"
-
-				commonResultUploadBuilder almDomain: 'CCD',
-					almProject: 'DEVOPS_PC',
-					almServerName: 'ALMServer',
-					almTestFolder: "NTDO\\${release}",
-					almTestSetFolder: "NTDO\\${release}",
-					clientType: '',
-					createNewTest: false,
-					credentialsId: 'AlmUser',
-					fieldMapping: '''testset:
-  root: "x:result/suites/suite"
-  name: "x:enclosingBlockNames/string"
-  subtype-id: "v:hp.qc.test-set.default"
-test:
-  root: "x:cases/case"
-  name: "x:testName"
-  subtype-id: "v:MANUAL"
-run:
-  root: "x:."
-  duration: "x:duration"
-  status: "x:failedSince"
-''',
-					runStatusMapping: '''status:
-  1: "Passed" # If status attribute is "1" in report, the run in ALM will be marked as "Passed"
-  0: "Failed" # If status attribute is "0" in report, the run in ALM will be marked as "Failed"
-''',
-					testingResultFile: '**/junitResult.xml'
-
-
-//				node ('NodoJava8') {
-
-//				uploadResultToALM almServerName: 'ALMServer',
-//					credentialsId: 'AlmUser',
-//					almDomain: 'CCD',
-//					almProject: 'DEVOPS_PC',
-//					clientType: '',
-//					almTimeout: '600',
-//					jenkinsServerUrl: 'http://ntx52desa299.seg-social.ss:8080',
-//					almTestFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
-//					almTestSetFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
-//					testingFramework: 'JUnit',
-//					testingResultFile: '**/junitResult.xml',
-//					testingTool: 'Natural Unit test'
-//junitResult.xml
-//logUnitTest.xml
-//				}
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

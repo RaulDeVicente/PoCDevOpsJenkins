@@ -21,6 +21,11 @@ def host= "10.199.54.174"
 def port= "9080"
 //http://10.199.54.174:9080/ProsaPortal7/index.jsp
 
+//Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas
+def webdriverMSEdge= "C:\\edgedriver_win64\\msedgedriver.exe"
+//Variable de sistema 'webdriver.chrome.driver' con la ruta del .exe encargado de realizar las pruebas
+def webdriverChrome= "C:\\chromedriver.exe"
+
 
 // Variables que se calculan en el Pipe.
 // Variable con la puntuación obtenida en Kiuwan.

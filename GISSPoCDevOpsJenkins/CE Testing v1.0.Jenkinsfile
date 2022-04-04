@@ -6,7 +6,7 @@ def urlGit = 'https://github.com/RaulDeVicente'
 
 
 // Variables que definen los datos del proyecto/aplicación
-def gitRepositorio = 'PoCNatDevOps'
+def gitRepositorio = 'PoCDevOpsSelenium'
 def codigoAplicacion = 'NTDO'
 def naturalProyecto = 'GISSPoCNatDevOps'
 def uftDominio = 'CCD'

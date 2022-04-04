@@ -68,16 +68,16 @@ pipeline {
 
 				script {
 
-					tpaiIniciaPrueba aplicacion: "${codigoAplicacion}",
+					monAdabasIniciaPrueba aplicacion: "${codigoAplicacion}",
 						version: "${RELEASE}",
 						estadoPruebas: 'Failure',
 						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
 									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
 
-					def tpaiOutput = readJSON file: "${env.WORKSPACE}/tpai/iniciarPruebaOutput_${env.BUILD_ID}.json"
+					def monAdaOutput = readJSON file: "${env.WORKSPACE}/monAdabas/iniciarPruebaOutput_${env.BUILD_ID}.json"
 
-					MONADA_Ticket = tpaiOutput.respuestaServicio.ticketPrueba
-					MONADA_respuesta = MONADAOutput.respuesta
+					MONADA_Ticket = monAdaOutput.respuestaServicio.ticketPrueba
+					MONADA_respuesta = monAdaOutput.respuesta
 				}
 
 				echo "Finalizando arranque monitorización Adabas (MONADA) con respuesta ${MONADA_respuesta} y con Ticket ${MONADA_Ticket}"
@@ -168,7 +168,7 @@ pipeline {
 			steps {
 				echo "Iniciando parada monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
 
-				tpaiFinalizaPrueba ticketPrueba: "${MONADA_Ticket}",
+				monAdabasFinalizaPrueba ticketPrueba: "${MONADA_Ticket}",
 					estadoRetorno: 'Unstable',
 					intervaloPooling: "20",
 					timeoutPooling: "1200"

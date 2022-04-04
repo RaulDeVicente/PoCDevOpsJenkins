@@ -121,7 +121,7 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas funcionales (Selenium y JUnit)"
                 checkout([$class: 'GitSCM',
-    					branches: [[name: '*/master']],
+    					branches: [[name: '*/main']],
     					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
 	   
 		        withMaven {
@@ -144,7 +144,7 @@ pipeline {
 			steps {
 				echo "Iniciando Pruebas funcionales (Selenium y TestNG)"
                 checkout([$class: 'GitSCM',
-    					branches: [[name: '*/master']],
+    					branches: [[name: '*/main']],
     					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
 	   
 		        withMaven {

@@ -8,7 +8,6 @@ def urlGit = 'https://github.com/RaulDeVicente'
 // Variables que definen los datos del proyecto/aplicación
 def gitRepositorio = 'PoCDevOpsSelenium'
 def codigoAplicacion = 'NTDO'
-def naturalProyecto = 'GISSPoCNatDevOps'
 def uftDominio = 'CCD'
 def uftProyecto = 'DEVOPS_PC'
 def uftUsuario = 'JENKINPC'
@@ -28,16 +27,8 @@ def webdriverChrome= "C:\\chromedriver.exe"
 
 
 // Variables que se calculan en el Pipe.
-// Variable con la puntuación obtenida en Kiuwan.
-def KiuwanScore
 // Variable con el Ticket generada por MONADA.
 def MONADA_Ticket
-// Variable con el Código de Resultado de la Entrega a la Promoción Natural.
-def entregaRetorno
-// Variable con el número de módulos Entregados a la Promoción Natural.
-def entregaModulosProcesados
-// Variable con el Código de Resultado de la Instalación en CE.
-def instalarRetorno
 // Variable con el Código de Resultado del inicio de las pruebas con MONADA.
 def MONADA_respuesta
 
@@ -153,9 +144,40 @@ pipeline {
 					//bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
                 }
 
+				// Publicando resultados de TestNG
+				echo "Publicando resultado de TestNG"
 				step([$class: 'Publisher', reportFilenamePattern: '**/testng-results.xml'])
 
-//**/testng-results.xml
+				echo "Publicando resultado en ALM"
+// Faltaría ver cómo meter todos los datos del fallo en ALM.
+// También falta ver cómo resilver el caso del estado Failed.
+				commonResultUploadBuilder almDomain: 'CCD',
+					almProject: 'DEVOPS_PC',
+					almServerName: 'ALMServer',
+					almTestFolder: "NTDO\\${RELEASE}",
+					almTestSetFolder: "NTDO\\${RELEASE}",
+					clientType: '',
+					createNewTest: true,
+					credentialsId: 'AlmUser',
+					fieldMapping: '''testset:
+  root: "x:result/suites/suite"
+  name: "x:enclosingBlockNames/string|v:_|${RELEASE}"
+  subtype-id: "v:hp.qc.test-set.external"
+test:
+  root: "x:cases/case"
+  name: "x:testName"
+  subtype-id: "v:EXTERNAL-TEST"
+run:
+  root: "x:."
+  duration: "x:duration"
+  status: "x:failedSince"
+''',
+					runStatusMapping: '''status:
+  0: "Passed"
+  1: "Failed"
+''',
+					testingResultFile: '**/junitResult.xml'
+
 
 				echo "Finalizando Pruebas funcionales (Selenium y TestNG)"
 			}

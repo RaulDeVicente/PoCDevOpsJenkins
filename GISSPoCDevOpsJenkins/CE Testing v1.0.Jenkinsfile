@@ -40,10 +40,10 @@ def MONADA_respuesta
 pipeline {
 	parameters {
 		string(name: 'RELEASE', defaultValue: '1.1.1.', description: 'Release asociada.')
-		booleanParam(name: 'EJECUTAR_MONADA', defaultValue: false, description: 'Define si se deben ejecutar los Stage de MONADA.')
-		booleanParam(name: 'EJECUTAR_UFT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
-		booleanParam(name: 'EJECUTAR_SELENIUM_JUNIT', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y JUnit.')
-		booleanParam(name: 'EJECUTAR_SELENIUM_TESTNG', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y TestNG.')
+		booleanParam(name: 'EJECUTAR_MONADA', defaultValue: true, description: 'Define si se deben ejecutar los Stage de MONADA.')
+		booleanParam(name: 'EJECUTAR_UFT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
+		booleanParam(name: 'EJECUTAR_SELENIUM_JUNIT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y JUnit.')
+		booleanParam(name: 'EJECUTAR_SELENIUM_TESTNG', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y TestNG.')
 	}
 
 	agent any

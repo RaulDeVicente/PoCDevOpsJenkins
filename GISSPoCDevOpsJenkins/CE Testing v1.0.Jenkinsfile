@@ -208,6 +208,8 @@ run:
 			steps {
 				echo "Iniciando análisis monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
 
+				echo "Falta acceder al Despool a por el informe para el Ticket ${MONADA_Ticket}"
+// TODO Falta recoger el informe de Despool.
 
 				echo "Finalizando análisis monitorización Adabas (MONADA)"
 			}

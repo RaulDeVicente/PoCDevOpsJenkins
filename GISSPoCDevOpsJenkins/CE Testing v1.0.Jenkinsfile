@@ -12,7 +12,6 @@ def uftDominio = 'CCD'
 def uftProyecto = 'DEVOPS_PC'
 def uftUsuario = 'JENKINPC'
 def uftPassword = 'JENKINPC01'
-def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
 def uftEjecutor = '10.99.104.203'
 
 //Variable que define el host en el que se realizarán las pruebas con Selenium
@@ -92,7 +91,7 @@ pipeline {
 						almPassword: "${uftPassword}",
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: "${uftEjecutor}",
-						almTestSets: "${uftTestSets}",
+						almTestSets: "Root\\NTDO\\${RELEASE}\\Funcionales_UFT_${RELEASE}_${env.BUILD_ID}",
 						almTimeout: '3000',
 						almClientID: '',
 						almRunResultsMode: '',
@@ -161,7 +160,7 @@ pipeline {
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
   root: "x:result/suites/suite"
-  name: "v:Funcionales_|x:enclosingBlockNames/string|v:_|${RELEASE}"
+  name: "v:Funcionales_|x:enclosingBlockNames/string|v:_|${RELEASE}|v:_|${env.BUILD_ID}"
   subtype-id: "v:hp.qc.test-set.external"
 test:
   root: "x:cases/case"

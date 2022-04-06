@@ -16,7 +16,7 @@ def release = "IC_1.0_${env.BUILD_ID}"
 
 // Variables para las pruebas unitarias
 def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
-def unitTest_EX_SRV = 'RPC/NTSILTGA/CALLNAT'
+def unitTest_EX_SRV = 'RPC/NTDEVOPS/CALLNAT'
 def unitTest_EX_RPCUSR = 'SGU2142'
 def unitTest_EX_RPCPWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
 def unitTest_EX_EXXUSR = 'SGU2142'

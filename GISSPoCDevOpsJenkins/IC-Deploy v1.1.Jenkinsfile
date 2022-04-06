@@ -95,7 +95,7 @@ pipeline {
 			}
 		}
 
-		stage('Despliegue en CE') {
+		stage('Despliegue en IC') {
 			when {
 				expression { params.EJECUTAR_DEPLOYIC }
 			}

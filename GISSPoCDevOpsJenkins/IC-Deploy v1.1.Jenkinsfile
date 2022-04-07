@@ -17,11 +17,11 @@ def release = "IC_1.1_${env.BUILD_ID}"
 
 // Variables para las pruebas unitarias
 def unitTest_EX_BRK = 'ETB038.99g.giss.ss:10100'
-def unitTest_EX_SRV = 'RPC/NTSILTGA/CALLNAT'
-def unitTest_EX_RPCUSR = 'SGU2142'
-def unitTest_EX_RPCPWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
-def unitTest_EX_EXXUSR = 'SGU2142'
-def unitTest_EX_EXXPWD = 'zr7HrKJhjZ2sx4hmrm12Tg'
+def unitTest_EX_SRV = 'RPC/NTDEVOPS/CALLNAT'
+def unitTest_EX_RPCUSR = ''
+def unitTest_EX_RPCPWD = ''
+def unitTest_EX_EXXUSR = ''
+def unitTest_EX_EXXPWD = ''
 
 
 // Variables que se calculan en el Pipe.
@@ -162,7 +162,7 @@ pipeline {
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {
-					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.. -Dnatural.testing.ant.brokerid=${unitTest_EX_BRK} -Dnatural.testing.ant.srvaddr=${unitTest_EX_SRV} -Dnatural.testing.ant.rpcuid=${unitTest_EX_RPCUSR} -Dnatural.testing.ant.rpcpwd=${unitTest_EX_RPCPWD} -Dnatural.testing.ant.exxuid=${unitTest_EX_EXXUSR} -Dnatural.testing.ant.exxpwd=${unitTest_EX_EXXPWD}"
+					def Parametros = "-lib ${libreriasUnitTest} -buildfile ${naturalProyecto}/${naturalProyecto}/unitTest914NoLogon.xml -listener com.softwareag.natural.unittest.ant.framework.NaturalTestingJunitLogger -Dnatural.ant.project.rootdir=../.. -Dnatural.testing.ant.brokerid=${unitTest_EX_BRK} -Dnatural.testing.ant.srvaddr=${unitTest_EX_SRV} -Dnatural.testing.ant.rpcuid=${unitTest_EX_RPCUSR} -Dnatural.testing.ant.rpcpwd=${unitTest_EX_RPCPWD} -Dnatural.testing.ant.exxuid=${unitTest_EX_EXXUSR} -Dnatural.testing.ant.exxpwd=${unitTest_EX_EXXPWD}"
 					withAnt(installation: 'Ant Local', jdk: 'Java11') {
 						if (isUnix()) {
 							sh "ant ${Parametros}"

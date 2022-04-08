@@ -16,8 +16,8 @@ def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
 def uftEjecutor = '10.99.104.203'
 
 //Variable que define el host en el que se realizarán las pruebas con Selenium
-def host= "10.199.54.174"
-def port= "9080"
+def seleniumHost= "10.199.54.176"
+def seleniumPort= "9080"
 //http://10.199.54.174:9080/ProsaPortal7/index.jsp
 
 //Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas
@@ -142,8 +142,8 @@ pipeline {
 	   
 		        withMaven {
 					//Ejecución con ChromeDriver   
-					bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-					//bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
+					bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
+					//bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
                 }
 
 				// Publicando resultados de TestNG

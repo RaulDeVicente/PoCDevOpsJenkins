@@ -63,7 +63,7 @@ pipeline {
 						version: "${RELEASE}",
 						estadoPruebas: 'Failure',
 						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
-									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUSE343']]
+									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUS7143']]
 
 					def monAdaOutput = readJSON file: "${env.WORKSPACE}/monitorizacionAdabas/iniciarPruebaOutput_${env.BUILD_ID}.json"
 

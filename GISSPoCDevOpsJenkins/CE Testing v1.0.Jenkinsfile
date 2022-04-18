@@ -16,8 +16,9 @@ def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
 def uftEjecutor = '10.99.104.203'
 
 //Variable que define el host en el que se realizarán las pruebas con Selenium
-def seleniumHost= "10.199.54.176"
-def seleniumPort= "9080"
+//10.199.52.210:9081
+def seleniumHost= "10.199.52.210"
+def seleniumPort= "9081"
 //http://10.199.54.174:9080/ProsaPortal7/index.jsp
 
 //Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas

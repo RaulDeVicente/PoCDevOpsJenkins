@@ -40,6 +40,18 @@ pipeline {
 				expression { params.EJECUTAR_UNIT_TEST }
 			}
 			steps {
+				echo "Iniciando CheckOut de Git"
+
+// TODO Cambiar la rama.
+				// Obtiene el código del GitHub repository con el Plugin de GIT
+				checkout([$class: 'GitSCM',
+					branches: [[name: '*/main']],
+					extensions: [[$class: 'RelativeTargetDirectory',
+					relativeTargetDir: "${naturalProyecto}"]],
+					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
+
+				echo "Finalizando CheckOut de Git"
+
 				echo "Iniciando Pruebas unitarias (Natural Unit Test)"
 
 				script {

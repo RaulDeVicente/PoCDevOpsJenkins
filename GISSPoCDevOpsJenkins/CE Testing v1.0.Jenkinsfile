@@ -19,7 +19,6 @@ def uftEjecutor = '10.99.104.203'
 //http://10.99.104.217:9081/ProsaPortal7/index.jsp
 def seleniumHost= "10.99.104.217"
 def seleniumPort= "9081"
-//http://10.199.54.174:9080/ProsaPortal7/index.jsp
 
 //Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas
 def webdriverMSEdge= "C:\\edgedriver_win64\\msedgedriver.exe"
@@ -176,11 +175,13 @@ run:
   status: "x:failedSince"
 ''',
 					runStatusMapping: '''status:
-  0: "Passed"
-  1: "Failed"
+  Passed: "==0"
+  Failed: ">=0"
 ''',
 					testingResultFile: '**/junitResult.xml'
 
+//  0: "Passed"
+//  1: "Failed"
 
 				echo "Finalizando Pruebas funcionales (Selenium y TestNG)"
 			}

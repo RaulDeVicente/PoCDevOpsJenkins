@@ -96,7 +96,6 @@ run:
 ''',
 					runStatusMapping: '''status:
   Passed: "==0"
-  Failed: ">=0"
 ''',
 					testingResultFile: '**/junitResult.xml'
 

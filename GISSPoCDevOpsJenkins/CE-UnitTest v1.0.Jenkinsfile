@@ -80,6 +80,7 @@ pipeline {
 					almTestSetFolder: "NTDO\\${RELEASE}",
 					clientType: '',
 					createNewTest: true,
+					testingResultFile: '**/junitResult.xml',
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
   root: "x:result/suites/suite"
@@ -96,8 +97,7 @@ run:
 ''',
 					runStatusMapping: '''status:
   Passed: "==0"
-''',
-					testingResultFile: '**/junitResult.xml'
+'''
 
 //  0: "Passed"
 //  1: "Failed"

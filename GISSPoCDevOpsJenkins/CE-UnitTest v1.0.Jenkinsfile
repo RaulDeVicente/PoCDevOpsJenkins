@@ -96,11 +96,13 @@ run:
   status: "x:failedSince"
 ''',
 					runStatusMapping: '''status:
-  Passed: "==0"
+  0: "Passed"
+  1: "Failed"
 '''
 
 //  0: "Passed"
 //  1: "Failed"
+//  Passed: "==0"
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

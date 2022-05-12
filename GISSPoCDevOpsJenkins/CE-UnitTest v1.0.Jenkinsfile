@@ -96,8 +96,7 @@ run:
   status: "x:failedSince"
 ''',
 					runStatusMapping: '''status:
-  0: "Passed"
-  1: "Failed"
+  Passed: "==0"
 '''
 
 //  0: "Passed"

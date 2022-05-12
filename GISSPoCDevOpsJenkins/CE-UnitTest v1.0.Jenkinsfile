@@ -93,10 +93,10 @@ test:
 run:
   root: "x:."
   duration: "x:duration"
-  status: "x:failedSince"
+  status: "x:errorDetails"
 ''',
 					runStatusMapping: '''status:
-  Passed: "==0"
+  Failed: "==test failure"
 '''
 
 //  0: "Passed"

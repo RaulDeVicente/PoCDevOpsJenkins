@@ -162,26 +162,29 @@ pipeline {
 					createNewTest: true,
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
+
   root: "x:result/suites/suite"
   name: "v:Funcionales_|x:enclosingBlockNames/string|v:_|${RELEASE}|v:_|${BUILD_ID}"
   subtype-id: "v:hp.qc.test-set.external"
 test:
   root: "x:cases/case"
   name: "x:testName"
+  testing-framework: "TestNG"
+  testing-tool: "Selenium"
+  ut-class-name: "x:className"
+  ut-method-name: "x:testName"
   subtype-id: "v:EXTERNAL-TEST"
 run:
   root: "x:."
   duration: "x:duration"
-  status: "x:failedSince"
+  status: "x:errorDetails"
+  detail: "x:errorDetails"
 ''',
 					runStatusMapping: '''status:
-  Passed: "==0"
-  Failed: ">=0"
+  Failed: "!=NULL"
 ''',
 					testingResultFile: '**/junitResult.xml'
 
-//  0: "Passed"
-//  1: "Failed"
 
 				echo "Finalizando Pruebas funcionales (Selenium y TestNG)"
 			}

@@ -199,31 +199,21 @@ pipeline {
 test:
   root: "x:cases/case"
   name: "x:testName"
+  testing-framework: "JUnit"
+  testing-tool: "Natural Unit Test"
+  ut-class-name: "x:className"
+  ut-method-name: "x:testName"
   subtype-id: "v:EXTERNAL-TEST"
 run:
   root: "x:."
   duration: "x:duration"
-  status: "x:failedSince"
+  status: "x:errorStackTrace"
+  detail: "x:errorStackTrace"
 ''',
 					runStatusMapping: '''status:
-  0: "Passed"
-  1: "Failed"
+  Failed: "!=NULL"
 ''',
 					testingResultFile: '**/junitResult.xml'
-
-// Esta forma no funciona con Java 11, solo con Java 8.
-//				uploadResultToALM almServerName: 'ALMServer',
-//					credentialsId: 'AlmUser',
-//					almDomain: 'CCD',
-//					almProject: 'DEVOPS_PC',
-//					clientType: '',
-//					almTimeout: '600',
-//					jenkinsServerUrl: 'http://ntx52desa299.seg-social.ss:8080',
-//					almTestFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
-//					almTestSetFolder: "Prueba\\PruebaFBG\\${env.BUILD_ID}",
-//					testingFramework: 'JUnit',
-//					testingResultFile: '**/junitResult.xml',
-//					testingTool: 'Natural Unit test'
 
 				echo "Finalizando Pruebas unitarias (Natural Unit Test)"
 			}

@@ -80,7 +80,6 @@ pipeline {
 					almTestSetFolder: "NTDO\\${RELEASE}",
 					clientType: '',
 					createNewTest: true,
-					testingResultFile: '**/junitResult.xml',
 					credentialsId: 'AlmUser',
 					fieldMapping: '''testset:
   root: "x:result/suites/suite"
@@ -89,15 +88,21 @@ pipeline {
 test:
   root: "x:cases/case"
   name: "x:testName"
+  testing-framework: "JUnit"
+  testing-tool: "Natural Unit Test"
+  ut-class-name: "x:className"
+  ut-method-name: "x:testName"
   subtype-id: "v:EXTERNAL-TEST"
 run:
   root: "x:."
   duration: "x:duration"
-  status: "x:errorDetails"
+  status: "x:errorStackTrace"
+  detail: "x:errorStackTrace"
 ''',
 					runStatusMapping: '''status:
-  Failed: "==test failure"
-'''
+  Failed: "!=NULL"
+''',
+					testingResultFile: '**/junitResult.xml'
 
 //  0: "Passed"
 //  1: "Failed"

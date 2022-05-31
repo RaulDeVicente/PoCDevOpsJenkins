@@ -124,7 +124,7 @@ pipeline {
 						rutaFichero: "${env.WORKSPACE}/${naturalProyecto}/${naturalProyecto}",
 						estadoRetorno: 'Failure'
 
-					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/entregarReleaseOutput_${env.BUILD_ID}.json"
+					def entregaOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/${env.BUILD_ID}/entregarReleaseOutput.json"
 
 					entregaRetorno = entregaOutput.respuesta
 					entregaModulosProcesados = entregaOutput.modulosProcesados
@@ -143,7 +143,7 @@ pipeline {
 						intervaloPooling: "20",
 						timeoutPooling: "1200"
 
-					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/desplegarReleaseOutput_${env.BUILD_ID}.json"
+					def instalarOutput = readJSON file: "${env.WORKSPACE}/promocionNatural/${env.BUILD_ID}/desplegarReleaseOutput.json"
 
 					instalarRetorno = instalarOutput.respuesta
 

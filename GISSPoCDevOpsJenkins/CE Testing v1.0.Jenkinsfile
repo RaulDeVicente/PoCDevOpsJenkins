@@ -65,7 +65,7 @@ pipeline {
 						listaPruebas: [[alcance: '1', elemento: 'TESTT', tipoPrueba: 'O', usuario: 'IDUSE306'],
 									   [alcance: '1', elemento: 'PRPI', tipoPrueba: 'P', usuario: 'IDUS7143']]
 
-					def monAdaOutput = readJSON file: "${env.WORKSPACE}/monitorizacionAdabas/iniciarPruebaOutput_${env.BUILD_ID}.json"
+					def monAdaOutput = readJSON file: "${env.WORKSPACE}/monitorizacionAdabas/${env.BUILD_ID}/iniciarPruebaOutput.json"
 
 					MONADA_Ticket = monAdaOutput.respuestaServicio.ticketPrueba
 					MONADA_respuesta = monAdaOutput.respuesta

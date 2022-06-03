@@ -17,7 +17,8 @@ def uftEjecutor = '10.99.104.203'
 
 //Variable que define el host en el que se realizarán las pruebas con Selenium
 //http://10.99.104.217:9081/ProsaPortal7/index.jsp
-def seleniumHost= "10.99.104.217"
+//10.199.55.1:9081
+def seleniumHost= "10.199.55.1"
 def seleniumPort= "9081"
 
 //Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas

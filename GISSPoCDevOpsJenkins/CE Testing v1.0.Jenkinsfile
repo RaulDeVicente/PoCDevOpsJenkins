@@ -93,6 +93,8 @@ pipeline {
 						almProject: "${uftProyecto}",
 						almUserName: "${uftUsuario}",
 						almPassword: "${uftPassword}",
+						areParametersEnabled: false,
+						specifyParametersModel: [parameterJson: '[]'],
 						almRunMode: 'RUN_REMOTE',
 						almRunHost: "${uftEjecutor}",
 						almTestSets: "${uftTestSets}",

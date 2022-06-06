@@ -15,16 +15,13 @@ def uftPassword = 'JENKINPC01'
 def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
 def uftEjecutor = '10.99.104.203'
 
-//Variable que define el host en el que se realizarán las pruebas con Selenium
-//http://10.99.104.217:9081/ProsaPortal7/index.jsp
-//10.199.55.1:9081
-def seleniumHost= "10.199.55.1"
-def seleniumPort= "9081"
-
 //Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas
 def webdriverMSEdge= "C:\\edgedriver_win64\\msedgedriver.exe"
 //Variable de sistema 'webdriver.chrome.driver' con la ruta del .exe encargado de realizar las pruebas
 def webdriverChrome= "C:\\chromedriver.exe"
+
+def ChromeChoice= "Chrome WebDriver"
+def MSEdgeChoice= "MSEdge WebDriver"
 
 
 // Variables que se calculan en el Pipe.
@@ -39,8 +36,11 @@ pipeline {
 		string(name: 'RELEASE', defaultValue: '1.1.1.', description: 'Release asociada.')
 		booleanParam(name: 'EJECUTAR_MONADA', defaultValue: true, description: 'Define si se deben ejecutar los Stage de MONADA.')
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
-		booleanParam(name: 'EJECUTAR_SELENIUM_JUNIT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y JUnit.')
 		booleanParam(name: 'EJECUTAR_SELENIUM_TESTNG', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y TestNG.')
+		string(name: 'seleniumHost', defaultValue: '10.199.55.1', description: 'Dirección del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
+		string(name: 'seleniumPort', defaultValue: '9081', description: 'Puerto del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
+		choice(name: 'WebDriver', choices: ['Chrome WebDriver', 'MSEdge WebDriver'], description: 'Tipo de WebDriver a utilizar en la prueba.')
+
 	}
 
 	agent any
@@ -110,29 +110,6 @@ pipeline {
 			}
 		}
 
-		stage('Pruebas funcionales (Selenium y JUnit)') {
-			when {
-				expression { params.EJECUTAR_SELENIUM_JUNIT }
-			}
-			steps {
-				echo "Iniciando Pruebas funcionales (Selenium y JUnit)"
-                checkout([$class: 'GitSCM',
-    					branches: [[name: '*/main']],
-    					userRemoteConfigs: [[url: "${urlGit}/${gitRepositorio}.git"]]])
-	   
-		        withMaven {
-					//Ejecución con ChromeDriver   
-					//bat "mvn -e -f GISSPocDevOpsTestSeleniumJUnit/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-					bat "mvn -e -f GISSPocDevOpsTestSeleniumJUnit/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${host} -Dport=${port} -Dmaven.test.failure.ignore=true"
-                }
-
-//				junit 'logUnitTest.xml'
-
-				echo "Finalizando Pruebas funcionales (Selenium y JUnit)"
-			}
-		}
-
-
 		stage('Pruebas funcionales (Selenium y TestNG)') {
 			when {
 				expression { params.EJECUTAR_SELENIUM_TESTNG }
@@ -145,7 +122,15 @@ pipeline {
 	   
 		        withMaven {
 					//Ejecución con ChromeDriver   
-					bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
+					script {
+						if (WebDriver == ChromeChoice) {
+							bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
+						} else {
+							bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
+						}
+					}
+
+					//bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.chrome.driver=${webdriverChrome} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
 					//bat "mvn -e -f GISSPocDevOpsTestSelenium/pom.xml clean install -Dwebdriver.edge.driver=${webdriverMSEdge} -Dhost=${seleniumHost} -Dport=${seleniumPort} -Dmaven.test.failure.ignore=true"
                 }
 

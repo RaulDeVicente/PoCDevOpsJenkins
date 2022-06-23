@@ -85,6 +85,7 @@ pipeline {
   root: "x:result/suites/suite"
   name: "v:Unitarias_|x:enclosingBlockNames/string|v:_|${RELEASE}|v:_|${BUILD_ID}"
   subtype-id: "v:hp.qc.test-set.external"
+  attachment: "v:logUnitTest.xml"
 test:
   root: "x:cases/case"
   name: "x:testName"
@@ -93,8 +94,10 @@ test:
   ut-class-name: "x:className"
   ut-method-name: "x:testName"
   subtype-id: "v:EXTERNAL-TEST"
+  attachment: "v:logUnitTest.xml"
 run:
   root: "x:."
+  attachment: "v:logUnitTest.xml"
   duration: "x:duration"
   status: "x:errorStackTrace"
   detail: "x:errorStackTrace"

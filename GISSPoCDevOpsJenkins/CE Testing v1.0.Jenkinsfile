@@ -37,6 +37,7 @@ pipeline {
 		booleanParam(name: 'EJECUTAR_MONADA', defaultValue: true, description: 'Define si se deben ejecutar los Stage de MONADA.')
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
 		booleanParam(name: 'EJECUTAR_SELENIUM_TESTNG', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y TestNG.')
+		booleanParam(name: 'EJECUTAR_SUBIR_RESULTADOS_ALM', defaultValue: true, description: 'Define si se debe ejecutar el Stage de subida de resultados a ALM.')
 		string(name: 'seleniumHost', defaultValue: '10.199.55.1', description: 'Dirección del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
 		string(name: 'seleniumPort', defaultValue: '9081', description: 'Puerto del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
 		choice(name: 'WebDriver', choices: ['Chrome WebDriver', 'MSEdge WebDriver'], description: 'Tipo de WebDriver a utilizar en la prueba.')
@@ -138,9 +139,33 @@ pipeline {
 				echo "Publicando resultado de TestNG"
 				step([$class: 'Publisher', reportFilenamePattern: '**/testng-results.xml'])
 
-				echo "Publicando resultado en ALM"
-// Faltaría ver cómo meter todos los datos del fallo en ALM.
-// También falta ver cómo resilver el caso del estado Failed.
+				echo "Finalizando Pruebas funcionales (Selenium y TestNG)"
+			}
+		}
+
+		stage('Parando monitorización Adabas (MONADA)') {
+			when {
+				expression { params.EJECUTAR_MONADA }
+			}
+			steps {
+				echo "Iniciando parada monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
+
+				monAdabasFinalizaPrueba ticketPrueba: "${MONADA_Ticket}",
+					estadoRetorno: 'Unstable',
+					intervaloPooling: "20",
+					timeoutPooling: "1200"
+
+				echo "Finalizando parada monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
+			}
+		}
+
+
+		stage('Subida de resultados a ALM') {
+			when {
+				expression { params.EJECUTAR_SUBIR_RESULTADOS_ALM }
+			}
+			steps {
+				echo "Iniciando Subida de resultados a ALM"
 				commonResultUploadBuilder almDomain: 'CCD',
 					almProject: 'DEVOPS_PC',
 					almServerName: 'ALMServer',
@@ -164,6 +189,7 @@ test:
   subtype-id: "v:EXTERNAL-TEST"
 run:
   root: "x:."
+  attachment: "v:${env.WORKSPACE}/monitorizacionAdabas/${env.BUILD_ID}/*.pdf"
   duration: "x:duration"
   status: "x:errorDetails"
   detail: "x:errorDetails"
@@ -174,37 +200,7 @@ run:
 					testingResultFile: '**/junitResult.xml'
 
 
-				echo "Finalizando Pruebas funcionales (Selenium y TestNG)"
-			}
-		}
-
-		stage('Parando monitorización Adabas (MONADA)') {
-			when {
-				expression { params.EJECUTAR_MONADA }
-			}
-			steps {
-				echo "Iniciando parada monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
-
-				monAdabasFinalizaPrueba ticketPrueba: "${MONADA_Ticket}",
-					estadoRetorno: 'Unstable',
-					intervaloPooling: "20",
-					timeoutPooling: "1200"
-
-				echo "Finalizando parada monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
-			}
-		}
-
-		stage('Obteniendo análisis monitorización Adabas (MONADA)') {
-			when {
-				expression { params.EJECUTAR_MONADA }
-			}
-			steps {
-				echo "Iniciando análisis monitorización Adabas (MONADA) para el Ticket ${MONADA_Ticket}"
-
-				echo "Falta acceder al Despool a por el informe para el Ticket ${MONADA_Ticket}"
-// TODO Falta recoger el informe de Despool.
-
-				echo "Finalizando análisis monitorización Adabas (MONADA)"
+				echo "Finalizando Subida de resultados a ALM"
 			}
 		}
 

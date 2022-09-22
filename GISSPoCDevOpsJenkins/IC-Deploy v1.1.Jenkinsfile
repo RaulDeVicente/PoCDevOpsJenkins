@@ -36,7 +36,7 @@ pipeline {
 	parameters {
 		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
-		booleanParam(name: 'KIUWAN - Change Request', description: 'Nombre del Change Request al que quedará asociado el análisis.')
+		string(name: 'KIUWAN - Change Request', description: 'Nombre del Change Request al que quedará asociado el análisis.')
 		booleanParam(name: 'EJECUTAR_DEPLOYIC', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Despliegue en IC.')
 		booleanParam(name: 'EJECUTAR_UNIT_TEST', defaultValue: false, description: 'Define si se debe ejecutar el Stage de pruebas unitarias con Unit Test.')
 	}

@@ -83,7 +83,7 @@ pipeline {
 						applicationName_dm: "${codigoAplicacion}",
 						label_dm: "${release}",
 						selectedMode: 'DELIVERY_MODE',
-						changeRequest_dm: '${KIUWAN - Change Request}',
+						changeRequest_dm: "${KIUWAN - Change Request}",
 						changeRequestStatus_dm: 'INPROGRESS',
 						sourcePath: "${naturalProyecto}/${naturalProyecto}/Natural-Libraries",
 						indicateLanguages_dm: true,

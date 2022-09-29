@@ -4,9 +4,9 @@
 // Variable con la URL de acceso a Git.
 def urlGit = 'https://github.com/RaulDeVicente'
 // Variable con la ubicación de las librerías necesarias para realizar el deploy de Natural.
-def libreriasDeploy = 'C:/Raúl/LibsNatOne/deploy'
+def libreriasDeploy = 'C:/Raul/LibsNatOne/deploy'
 // Variable con la ubicación de las librerías necesarias para realizar el Unit Test de Natural.
-def libreriasUnitTest = 'C:/Raúl/LibsNatOne/unitTest'
+def libreriasUnitTest = 'C:/Raul/LibsNatOne/unitTest'
 
 
 // Variables que definen los datos del proyecto/aplicación

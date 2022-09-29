@@ -36,7 +36,7 @@ def instalarRetorno
 
 pipeline {
 	parameters {
-		string(name: 'RELEASE', defaultValue: '1.1.1.', description: 'Release asociada.')
+		string(name: 'RELEASE', defaultValue: '1.1.2.', description: 'Release asociada.')
 		booleanParam(name: 'EJECUTAR_CHECKOUT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Checkout de Git.')
 		booleanParam(name: 'EJECUTAR_KIUWAN', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Análisis de código estático con Kiuwan.')
 		booleanParam(name: 'EJECUTAR_DEPLOYCE', defaultValue: true, description: 'Define si se debe ejecutar el Stage de Despliegue en CE.')

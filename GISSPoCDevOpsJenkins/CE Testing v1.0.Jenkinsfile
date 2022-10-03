@@ -38,8 +38,8 @@ pipeline {
 		booleanParam(name: 'EJECUTAR_UFT', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con UFT.')
 		booleanParam(name: 'EJECUTAR_SELENIUM_TESTNG', defaultValue: true, description: 'Define si se debe ejecutar el Stage de pruebas funcionales con Selenium y TestNG.')
 		booleanParam(name: 'EJECUTAR_SUBIR_RESULTADOS_ALM', defaultValue: true, description: 'Define si se debe ejecutar el Stage de subida de resultados a ALM.')
-		string(name: 'seleniumHost', defaultValue: '10.199.55.1', description: 'Dirección del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
-		string(name: 'seleniumPort', defaultValue: '9081', description: 'Puerto del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
+		string(name: 'seleniumHost', defaultValue: '10.99.104.217', description: 'Dirección del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
+		string(name: 'seleniumPort', defaultValue: '9080', description: 'Puerto del Servidor Pros@ en el que se ejecutarán las pruebas de Selenium.')
 		choice(name: 'WebDriver', choices: ['Chrome WebDriver', 'MSEdge WebDriver'], description: 'Tipo de WebDriver a utilizar en la prueba.')
 
 	}

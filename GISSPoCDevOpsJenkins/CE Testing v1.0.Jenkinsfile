@@ -16,7 +16,7 @@ def uftTestSets = '''Root\\UFT_2021\\Testing_CI_UFT_2021_DESA'''
 def uftEjecutor = '10.99.104.203'
 
 //Variable de sistema 'webdriver.edge.driver' con la ruta del .exe encargado de realizar las pruebas
-def webdriverMSEdge= "C:\\edgedriver_win64\\msedgedriver.exe"
+def webdriverMSEdge= "C:\\msedgedriver.exe"
 //Variable de sistema 'webdriver.chrome.driver' con la ruta del .exe encargado de realizar las pruebas
 def webdriverChrome= "C:\\chromedriver.exe"
 

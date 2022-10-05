@@ -79,7 +79,7 @@ pipeline {
 
 				script {
 
-					kiuwan connectionProfileUuid: 'pqvj-J6Ik',
+					kiuwan connectionProfileUuid: 'EZs3-spo7',
 						applicationName_dm: "${codigoAplicacion}",
 						label_dm: "${RELEASE}",
 						selectedMode: 'DELIVERY_MODE',
